@@ -45,12 +45,12 @@ include_once __DIR__ . '/libs/WebHookModule.php';
 
 
             //Baseline Variables
-            $this->RegisterVariableInteger('StartDateBaseline', $this->Translate('Start Date Baseline'), '~UnixTimestampDate', 60 + ($i * 10));
+            $this->RegisterVariableInteger('StartDateBaseline', $this->Translate('Start Date Baseline'), '~UnixTimestampDate', 51);
             $this->EnableAction('StartDateBaseline');
             if ($this->GetValue('StartDateBaseline') == 0) {
                 $this->SetValue('StartDateBaseline', strtotime('01.01.' . date('Y')));
             }
-            $this->RegisterVariableInteger('EndDateBaseline' .$i, $this->Translate('End Date Baseline'), '~UnixTimestampDate', 70+  ($i * 10));
+            $this->RegisterVariableInteger('EndDateBaseline', $this->Translate('End Date Baseline'), '~UnixTimestampDate', 52);
             $this->EnableAction('EndDateBaseline');
             if ($this->GetValue('EndDateBaseline') == 0) {
                 $this->SetValue('EndDateBaseline', time());
