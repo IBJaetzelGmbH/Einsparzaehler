@@ -22,8 +22,15 @@
                                     "type": "SelectVariable",
                                     "caption": "Y Value Baseline",
                                     "name": "YValueBasleine",
-                                    "width": "150px",
+                                    "width": "auto",
                                     "requiredLogging": 1
+                                },
+                                {
+                                    "type": "SelectColor",
+                                    "caption": "Line Color",
+                                    "name": "LineColor",
+                                    "width": "auto"
+
                                 },
                                 {
                                     "type": "List",
@@ -54,15 +61,6 @@
                                         {
                                             "caption": "Point Color",
                                             "name": "PointColor",
-                                            "width": "50px",
-                                            "add": 0,
-                                            "edit": {
-                                                "type": "SelectColor"
-                                            }
-                                        },
-                                        {
-                                            "caption": "Line Color",
-                                            "name": "LineColor",
                                             "width": "50px",
                                             "add": 0,
                                             "edit": {

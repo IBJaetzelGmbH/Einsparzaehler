@@ -20,6 +20,8 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             //Baseline Variables
             $this->RegisterPropertyInteger('XValueBaseline',0);
             $this->RegisterPropertyInteger('YValueBaseline',0);
+            $this->RegisterPropertyInteger('LineColor',0);
+            
             //Variable settings
             $this->RegisterPropertyInteger('AggregationLevel', 1);
             $this->RegisterPropertyString('AxesValues', '[]');
