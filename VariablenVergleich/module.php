@@ -345,14 +345,14 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                     $xVarValues[] = $dataset['Avg'];
                 }
                 $valuesX = array_reverse($xVarValues);
-                IPS_LogMessage('valuesX',print_r($valuesX));
+                IPS_LogMessage('valuesX',print_r($valuesX,true));
                 $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
                 $yVarValues = [];
                 foreach ($rawY as $dataset) {
                     $yVarValues[] = $dataset['Avg'];
                 }
                 $valuesY = array_reverse($yVarValues);
-                IPS_LogMessage('valuesX',print_r($valuesX));
+                IPS_LogMessage('valuesY',print_r($valuesY,true));
                 if (count($valuesX) != count($valuesY)) {
                     $this->SetStatus(200);
                     // The amount of values is not the same for both axis
