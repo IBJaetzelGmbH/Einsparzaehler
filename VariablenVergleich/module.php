@@ -270,8 +270,8 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 if ($xVariableId != 0 && $yVariableId != 0) {
                     $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
 
-                    $startDate = $this->GetValue('StartDate');
-                    $endDate = $this->GetValue('EndDate');
+                    $startDate = $this->GetValue('StartDate' .$i);
+                    $endDate = $this->GetValue('EndDate'. $i);
                     $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
                     $xVarValues = [];
                     foreach ($rawX as $dataset) {
