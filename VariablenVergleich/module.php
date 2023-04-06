@@ -330,24 +330,11 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                     $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
                     $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
                 }
-
-                                //Linear regression - Baseline                
-                                $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('LineColor')), 6, '0', STR_PAD_LEFT);
-                                $lineRGB = $this->splitHexToRGB($lineHex);
-                                $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
-                                $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
-                                $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
-                                $this->SetValue('YIntercept', $lineParameters[0]);
-                                $this->SetValue('Slope', $lineParameters[1]);
-                                $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
-                                $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
-                                imageline($image, $getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineColor);
-                                $svg .= $this->drawLine($getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineSVGColor);
-                
+               
             }
                 //Baseline Values
                 $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
-                $yVariableId = $this->ReadPropertyInteger('XValueBaseline');
+                $yVariableId = $this->ReadPropertyInteger('YValueBaseline');
                 $startDate = $this->GetValue('StartDateBaseline');
                 $endDate = $this->GetValue('EndDateBaseline');
                 if ($xVariableId != 0 && $yVariableId != 0) {
