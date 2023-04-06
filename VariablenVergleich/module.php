@@ -370,11 +370,6 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             $m = $this->GetValue('Slope');
             $r = $this->GetValue('MeasureOfDetermination');
 
-            $this->SetValue('YIntercept', $lineParameters[0]);
-            $this->SetValue('Slope', $lineParameters[1]);
-            $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
-            $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
-
             $valuesX = $Values['x'];
             $valuesY = $Values['y'];
 
