@@ -385,7 +385,7 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             }
 
             if ($type == 'csv') {
-                $csv = 'Datum X;Datum Y,Berchnet aus Baseline,Einsparung';
+                $csv = 'Datum X;Datum Y;Berchnet aus Baseline;Einsparung';
                 $csv .= "\n";
                 foreach ($report as $value) {
                     $csv .= implode(';', $value) . PHP_EOL;
