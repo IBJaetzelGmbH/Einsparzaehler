@@ -377,9 +377,9 @@ include_once __DIR__ . '/libs/WebHookModule.php';
 
             IPS_LogMessage('test',print_r($Values,true));
 
-            for ($i = 0; $i <= count($Values); $i++) {
-                $report[$i]['BrechnetAusBaseline'] = $m * $Values['x'][$i] + $b;
-                $report[$i]['Einsparung'] = $report[$i]['BrechnetAusBaseline'] - $Values['y'][$i];
+            for ($i = 0; $i <= count($Values['x']); $i++) {
+                $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i] + $b;
+                $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i];
             }
             return $report;
         }
