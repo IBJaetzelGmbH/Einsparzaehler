@@ -336,6 +336,8 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $yVariableId = $this->ReadPropertyInteger('XValueBaseline');
                 $startDate = $this->GetValue('StartDateBaseline');
                 $endDate = $this->GetValue('EndDateBaseline');
+                if ($xVariableId != 0 && $yVariableId != 0) {
+                    $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
                 $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
                 $xVarValues = [];
                 foreach ($rawX as $dataset) {
@@ -349,6 +351,21 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                     $yVarValues[] = $dataset['Avg'];
                 }
                 $valuesY = array_reverse($yVarValues);
+                if (count($valuesX) != count($valuesY)) {
+                    $this->SetStatus(200);
+                    // The amount of values is not the same for both axis
+                    return null;
+                } elseif (count($valuesY) <= 1) {
+                    $this->SetStatus(201);
+                    // The count of values is zero or one which leads to an error in the linear regression
+                    return null;
+                }
+            } else {
+                //No vars selected
+                $this->SetStatus(202);
+                return null;
+            }
+                
                 
                 //Linear regression - Baseline                
                 $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('LineColor')), 6, '0', STR_PAD_LEFT);
