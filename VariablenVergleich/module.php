@@ -310,7 +310,7 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             $yVariableId = $this->ReadPropertyInteger('YValueBaseline');
             $startDate = $this->GetValue('StartDateBaseline');
             $endDate = $this->GetValue('EndDateBaseline');
-            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, endDate);
+            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
 
             if ($Values != null) {
                 $valuesX = $Values['x'];
