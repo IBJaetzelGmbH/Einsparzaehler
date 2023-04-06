@@ -12,6 +12,26 @@
                             "width": "500px",
                             "items": [
                                 {
+                                    "caption": "X Value Baseline",
+                                    "name": "XValueBaseline",
+                                    "width": "auto",
+                                    "add": 0,
+                                    "edit": {
+                                        "type": "SelectVariable",
+                                        "requiredLogging": 1
+                                    }
+                                },
+                                {
+                                    "caption": "Y Value Baseline",
+                                    "name": "YValueBasleine",
+                                    "width": "150px",
+                                    "add": 0,
+                                    "edit": {
+                                        "type": "SelectVariable",
+                                        "requiredLogging": 1
+                                    }
+                                },                                
+                                {
                                     "type": "List",
                                     "name": "AxesValues",
                                     "caption": "Chart Values",

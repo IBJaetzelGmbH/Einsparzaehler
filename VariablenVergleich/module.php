@@ -16,6 +16,10 @@ include_once __DIR__ . '/libs/WebHookModule.php';
 
         public function Create()
         {
+
+            //Baseline Variables
+            $this->RegisterPropertyInteger('XValueBaseline',0);
+            $this->RegisterPropertyInteger('YValueBaseline',0);
             //Variable settings
             $this->RegisterPropertyInteger('AggregationLevel', 1);
             $this->RegisterPropertyString('AxesValues', '[]');
@@ -39,7 +43,21 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             $this->RegisterVariableFloat('Slope', $this->Translate('m'), '', 30);
             $this->RegisterVariableFloat('MeasureOfDetermination', $this->Translate('Measure of determination'), '', 40);
 
+
+            //Baseline Variables
+            $this->RegisterVariableInteger('StartDateBaseline', $this->Translate('Start Date Baseline'), '~UnixTimestampDate', 60 + ($i * 10));
+            $this->EnableAction('StartDateBaseline');
+            if ($this->GetValue('StartDateBaseline') == 0) {
+                $this->SetValue('StartDateBaseline', strtotime('01.01.' . date('Y')));
+            }
+            $this->RegisterVariableInteger('EndDateBaseline' .$i, $this->Translate('End Date Baseline'), '~UnixTimestampDate', 70+  ($i * 10));
+            $this->EnableAction('EndDateBaseline');
+            if ($this->GetValue('EndDateBaseline') == 0) {
+                $this->SetValue('EndDateBaseline', time());
+            }
+
             $this->RegisterAttributeInteger('OldDateVariables', 0);
+
 
         }
 
@@ -310,8 +328,27 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                     $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
                     $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
                 }
+            }
+                //Baseline Values
+                $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
+                $yVariableId = $this->ReadPropertyInteger('XValueBaseline');
+                $startDate = $this->GetValue('StartDateBaseline');
+                $endDate = $this->GetValue('EndDateBaseline');
+                $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+                $xVarValues = [];
+                foreach ($rawX as $dataset) {
+                    $xVarValues[] = $dataset['Avg'];
+                }
+                $valuesX = array_reverse($xVarValues);
 
-                //Linear regression
+                $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+                $yVarValues = [];
+                foreach ($rawY as $dataset) {
+                    $yVarValues[] = $dataset['Avg'];
+                }
+                $valuesY = array_reverse($yVarValues);
+                
+                //Linear regression - Baseline                
                 $lineHex = '#' . str_pad(dechex($axesValues[$i]['LineColor']), 6, '0', STR_PAD_LEFT);
                 $lineRGB = $this->splitHexToRGB($lineHex);
                 $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
@@ -323,7 +360,6 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
                 imageline($image, $getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineColor);
                 $svg .= $this->drawLine($getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineSVGColor);
-            }
 
             $svg .= '</svg>';
             // $this->SendDebug('SVG', $svg, 0);
