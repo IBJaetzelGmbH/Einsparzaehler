@@ -39,18 +39,6 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             $this->RegisterVariableFloat('Slope', $this->Translate('m'), '', 30);
             $this->RegisterVariableFloat('MeasureOfDetermination', $this->Translate('Measure of determination'), '', 40);
 
-            //Time period
-            $this->RegisterVariableInteger('StartDate', $this->Translate('Start Date'), '~UnixTimestampDate', 60);
-            $this->EnableAction('StartDate');
-            if ($this->GetValue('StartDate') == 0) {
-                $this->SetValue('StartDate', strtotime('01.01.' . date('Y')));
-            }
-            $this->RegisterVariableInteger('EndDate', $this->Translate('End Date'), '~UnixTimestampDate', 70);
-            $this->EnableAction('EndDate');
-            if ($this->GetValue('EndDate') == 0) {
-                $this->SetValue('EndDate', time());
-            }
-
             $this->RegisterAttributeInteger('OldDateVariables', 0);
 
         }
