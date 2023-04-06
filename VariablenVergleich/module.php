@@ -364,7 +364,7 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             $yVariableId = $axesValues[$ListIndex]['YValue'];
             $startDate = $this->GetValue('StartDate' . $ListIndex);
             $endDate = $this->GetValue('EndDate' . $ListIndex);
-            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
+            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate, true);
 
             $b = $this->GetValue('YIntercept');
             $m = $this->GetValue('Slope');
@@ -375,11 +375,13 @@ include_once __DIR__ . '/libs/WebHookModule.php';
 
             $report = [];
 
-            IPS_LogMessage('test',print_r($Values,true));
+            IPS_LogMessage('test', print_r($Values, true));
 
-            for ($i = 0; $i <= count($Values['x']) -1; $i++) {
-                $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i] + $b;
-                $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i];
+            for ($i = 0; $i <= count($Values['x']) - 1; $i++) {
+                $report[$i]['timestampX'] = $Values['x'][$i]['TimeStamp'];
+                $report[$i]['timestampy'] = $Values['y'][$i]['TimeStamp'];
+                $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['avg'] + $b;
+                $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['avg'];
             }
             return $report;
         }
@@ -539,7 +541,7 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             return [$beta0, $beta1, $measureOfDetermination];
         }
 
-        private function getValues($xVariableId, $yVariableId, $startDate, $endDate)
+        private function getValues($xVariableId, $yVariableId, $startDate, $endDate, $timestsamp = false)
         {
             if ($xVariableId != 0 && $yVariableId != 0) {
                 $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
@@ -547,14 +549,22 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
                 $xVarValues = [];
                 foreach ($rawX as $dataset) {
-                    $xVarValues[] = $dataset['Avg'];
+                    if ($timestsamp) {
+                        $xVarValues[] = $dataset;
+                    } else {
+                        $xVarValues[] = $dataset['Avg'];
+                    }
                 }
                 $valuesX = array_reverse($xVarValues);
 
                 $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
                 $yVarValues = [];
                 foreach ($rawY as $dataset) {
-                    $yVarValues[] = $dataset['Avg'];
+                    if ($timestsamp) {
+                        $yVarValues[] = $dataset;
+                    } else {
+                        $yVarValues[] = $dataset['Avg'];
+                    }
                 }
                 $valuesY = array_reverse($yVarValues);
                 if (count($valuesX) != count($valuesY)) {
