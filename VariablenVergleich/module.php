@@ -339,18 +339,20 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 if ($xVariableId != 0 && $yVariableId != 0) {
                     $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
                 $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+               
                 $xVarValues = [];
                 foreach ($rawX as $dataset) {
                     $xVarValues[] = $dataset['Avg'];
                 }
                 $valuesX = array_reverse($xVarValues);
-
+                IPS_LogMessage('valuesX',print_r($valuesX));
                 $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
                 $yVarValues = [];
                 foreach ($rawY as $dataset) {
                     $yVarValues[] = $dataset['Avg'];
                 }
                 $valuesY = array_reverse($yVarValues);
+                IPS_LogMessage('valuesX',print_r($valuesX));
                 if (count($valuesX) != count($valuesY)) {
                     $this->SetStatus(200);
                     // The amount of values is not the same for both axis
