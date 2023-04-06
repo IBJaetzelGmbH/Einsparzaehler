@@ -18,9 +18,9 @@ include_once __DIR__ . '/libs/WebHookModule.php';
         {
 
             //Baseline Variables
-            $this->RegisterPropertyInteger('XValueBaseline',0);
-            $this->RegisterPropertyInteger('YValueBaseline',0);
-            $this->RegisterPropertyInteger('LineColor',0);
+            $this->RegisterPropertyInteger('XValueBaseline', 0);
+            $this->RegisterPropertyInteger('YValueBaseline', 0);
+            $this->RegisterPropertyInteger('LineColor', 0);
 
             //Variable settings
             $this->RegisterPropertyInteger('AggregationLevel', 1);
@@ -45,7 +45,6 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             $this->RegisterVariableFloat('Slope', $this->Translate('m'), '', 30);
             $this->RegisterVariableFloat('MeasureOfDetermination', $this->Translate('Measure of determination'), '', 40);
 
-
             //Baseline Variables
             $this->RegisterVariableInteger('StartDateBaseline', $this->Translate('Start Date Baseline'), '~UnixTimestampDate', 51);
             $this->EnableAction('StartDateBaseline');
@@ -59,8 +58,6 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             }
 
             $this->RegisterAttributeInteger('OldDateVariables', 0);
-
-
         }
 
         public function Destroy()
@@ -83,33 +80,32 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $this->UpdateFormField('Chart', 'mediaID', $mediaID);
             }
 
-            $oldDateVariables =  $this->ReadAttributeInteger('OldDateVariables');
+            $oldDateVariables = $this->ReadAttributeInteger('OldDateVariables');
             $axesValues = json_decode($this->ReadPropertyString('AxesValues'), true);
 
             if ($oldDateVariables == 0) {
                 $oldDateVariables = count($axesValues); // Wenn die Liste leerr ist
             }
 
-            for ($i=0; $i <= $oldDateVariables; $i++) { 
-                IPS_LogMessage('test',$i);
+            for ($i = 0; $i <= $oldDateVariables; $i++) {
                 if (count($axesValues) <= $i) {
-                    $this->UnregisterVariable('StartDate'. $i);
-                    $this->UnregisterVariable('EndDate'. $i);
+                    $this->UnregisterVariable('StartDate' . $i);
+                    $this->UnregisterVariable('EndDate' . $i);
                     continue;
                 } else {
-                    $this->RegisterVariableInteger('StartDate'. $i, $this->Translate('Start Date'). ' '. $i, '~UnixTimestampDate', 60 + ($i * 10));
-                    $this->EnableAction('StartDate'.$i);
-                    if ($this->GetValue('StartDate'.$i) == 0) {
-                        $this->SetValue('StartDate' .$i, strtotime('01.01.' . date('Y')));
+                    $this->RegisterVariableInteger('StartDate' . $i, $this->Translate('Start Date') . ' ' . $i, '~UnixTimestampDate', 60 + ($i * 10));
+                    $this->EnableAction('StartDate' . $i);
+                    if ($this->GetValue('StartDate' . $i) == 0) {
+                        $this->SetValue('StartDate' . $i, strtotime('01.01.' . date('Y')));
                     }
-                    $this->RegisterVariableInteger('EndDate' .$i, $this->Translate('End Date') . ' '. $i, '~UnixTimestampDate', 70+  ($i * 10));
-                    $this->EnableAction('EndDate'.$i);
-                    if ($this->GetValue('EndDate'.$i) == 0) {
-                        $this->SetValue('EndDate' .$i, time());
+                    $this->RegisterVariableInteger('EndDate' . $i, $this->Translate('End Date') . ' ' . $i, '~UnixTimestampDate', 70 + ($i * 10));
+                    $this->EnableAction('EndDate' . $i);
+                    if ($this->GetValue('EndDate' . $i) == 0) {
+                        $this->SetValue('EndDate' . $i, time());
                     }
                 }
             }
-            $this->WriteAttributeInteger('OldDateVariables',count($axesValues));
+            $this->WriteAttributeInteger('OldDateVariables', count($axesValues));
             $this->UpdateChart();
         }
 
@@ -132,8 +128,10 @@ include_once __DIR__ . '/libs/WebHookModule.php';
         public function RequestAction($Ident, $Value)
         {
             switch ($Ident) {
-                case  (preg_match('/StartDate.*/', $Ident) ? true : false) :
-                case  (preg_match('/EndDate.*/', $Ident) ? true : false) :
+                case  preg_match('/StartDate.*/', $Ident) ? true : false:
+                // No break. Add additional comment above this line if intentional
+                case  preg_match('/EndDate.*/', $Ident) ? true : false:
+                // No break. Add additional comment above this line if intentional
                 case 'StartDate':
                 case 'EndDate':
                     $this->SetValue($Ident, $Value);
@@ -287,90 +285,37 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             for ($i = 0; $i < count($axesValues); $i++) {
                 $xVariableId = $axesValues[$i]['XValue'];
                 $yVariableId = $axesValues[$i]['YValue'];
-                if ($xVariableId != 0 && $yVariableId != 0) {
-                    $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+                $startDate = $this->GetValue('StartDate' . $i);
+                $endDate = $this->GetValue('EndDate' . $i);
 
-                    $startDate = $this->GetValue('StartDate' .$i);
-                    $endDate = $this->GetValue('EndDate'. $i);
-                    $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
-                    $xVarValues = [];
-                    foreach ($rawX as $dataset) {
-                        $xVarValues[] = $dataset['Avg'];
-                    }
-                    $valuesX = array_reverse($xVarValues);
+                $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
+                if ($Values != null) {
+                    $valuesX = $Values['x'];
+                    $valuesY = $Values['y'];
 
-                    $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
-                    $yVarValues = [];
-                    foreach ($rawY as $dataset) {
-                        $yVarValues[] = $dataset['Avg'];
+                    //Draw point cloud
+                    $pointHex = '#' . str_pad(dechex($axesValues[$i]['PointColor']), 6, '0', STR_PAD_LEFT);
+                    $pointRGB = $this->splitHexToRGB($pointHex);
+                    $pointColor = imagecolorallocate($image, $pointRGB[0], $pointRGB[1], $pointRGB[2]);
+                    for ($j = 0; $j < count($valuesY); $j++) {
+                        $xValue = $getXValue($valuesX[$j]);
+                        $yValue = $getYValue($valuesY[$j]);
+                        $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
+                        $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
                     }
-                    $valuesY = array_reverse($yVarValues);
-                    if (count($valuesX) != count($valuesY)) {
-                        $this->SetStatus(200);
-                        // The amount of values is not the same for both axis
-                        return null;
-                    } elseif (count($valuesY) <= 1) {
-                        $this->SetStatus(201);
-                        // The count of values is zero or one which leads to an error in the linear regression
-                        return null;
-                    }
-                } else {
-                    //No vars selected
-                    $this->SetStatus(202);
-                    return null;
                 }
-
-                //Draw point cloud
-                $pointHex = '#' . str_pad(dechex($axesValues[$i]['PointColor']), 6, '0', STR_PAD_LEFT);
-                $pointRGB = $this->splitHexToRGB($pointHex);
-                $pointColor = imagecolorallocate($image, $pointRGB[0], $pointRGB[1], $pointRGB[2]);
-                for ($j = 0; $j < count($valuesY); $j++) {
-                    $xValue = $getXValue($valuesX[$j]);
-                    $yValue = $getYValue($valuesY[$j]);
-                    $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
-                    $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
-                }
-               
             }
-                //Baseline Values
-                $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
-                $yVariableId = $this->ReadPropertyInteger('YValueBaseline');
-                $startDate = $this->GetValue('StartDateBaseline');
-                $endDate = $this->GetValue('EndDateBaseline');
-                if ($xVariableId != 0 && $yVariableId != 0) {
-                    $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-                $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
-               
-                $xVarValues = [];
-                foreach ($rawX as $dataset) {
-                    $xVarValues[] = $dataset['Avg'];
-                }
-                $valuesX = array_reverse($xVarValues);
-                IPS_LogMessage('valuesX',print_r($valuesX,true));
-                $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
-                $yVarValues = [];
-                foreach ($rawY as $dataset) {
-                    $yVarValues[] = $dataset['Avg'];
-                }
-                $valuesY = array_reverse($yVarValues);
-                IPS_LogMessage('valuesY',print_r($valuesY,true));
-                if (count($valuesX) != count($valuesY)) {
-                    $this->SetStatus(200);
-                    // The amount of values is not the same for both axis
-                    return null;
-                } elseif (count($valuesY) <= 1) {
-                    $this->SetStatus(201);
-                    // The count of values is zero or one which leads to an error in the linear regression
-                    return null;
-                }
-            } else {
-                //No vars selected
-                $this->SetStatus(202);
-                return null;
-            }
-                
-                
-                //Linear regression - Baseline                
+            //Baseline Values
+            $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
+            $yVariableId = $this->ReadPropertyInteger('YValueBaseline');
+            $startDate = $this->GetValue('StartDateBaseline');
+            $endDate = $this->GetValue('EndDateBaseline');
+            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, endDate);
+
+            if ($Values != null) {
+                $valuesX = $Values['x'];
+                $valuesY = $Values['y'];
+                //Linear regression - Baseline
                 $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('LineColor')), 6, '0', STR_PAD_LEFT);
                 $lineRGB = $this->splitHexToRGB($lineHex);
                 $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
@@ -382,6 +327,7 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
                 imageline($image, $getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineColor);
                 $svg .= $this->drawLine($getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineSVGColor);
+            }
 
             $svg .= '</svg>';
             // $this->SendDebug('SVG', $svg, 0);
@@ -560,5 +506,43 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             }
             $measureOfDetermination = 1 - ($sqr / $sqt);
             return [$beta0, $beta1, $measureOfDetermination];
+        }
+
+        private function getValues($xVariableId, $yVariableId, $startDate, $endDate)
+        {
+            if ($xVariableId != 0 && $yVariableId != 0) {
+                $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+
+                $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+                $xVarValues = [];
+                foreach ($rawX as $dataset) {
+                    $xVarValues[] = $dataset['Avg'];
+                }
+                $valuesX = array_reverse($xVarValues);
+
+                $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+                $yVarValues = [];
+                foreach ($rawY as $dataset) {
+                    $yVarValues[] = $dataset['Avg'];
+                }
+                $valuesY = array_reverse($yVarValues);
+                if (count($valuesX) != count($valuesY)) {
+                    $this->SetStatus(200);
+                    // The amount of values is not the same for both axis
+                    return null;
+                } elseif (count($valuesY) <= 1) {
+                    $this->SetStatus(201);
+                    // The count of values is zero or one which leads to an error in the linear regression
+                    return null;
+                }
+            } else {
+                //No vars selected
+                $this->SetStatus(202);
+                return null;
+            }
+
+            $VarValues['x'] = $valuesX;
+            $VarValues['y'] = $valuesY;
+            return $VarValues;
         }
     }
