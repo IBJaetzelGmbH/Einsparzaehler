@@ -21,7 +21,7 @@
                                 {
                                     "type": "SelectVariable",
                                     "caption": "Y Value Baseline",
-                                    "name": "YValueBasleine",
+                                    "name": "YValueBaseline",
                                     "width": "auto",
                                     "requiredLogging": 1
                                 },
