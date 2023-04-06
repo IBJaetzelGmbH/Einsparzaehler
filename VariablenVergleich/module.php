@@ -353,6 +353,40 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             echo '/hook/linear-regression/' . $this->InstanceID;
         }
 
+        public function getReport($type, $ListIndex)
+        {
+            $axesValues = json_decode($this->ReadPropertyString('AxesValues'), true);
+            if (count($axesValues) <= 0) {
+                $this->SetStatus(202);
+                return;
+            }
+            $xVariableId = $axesValues[$i]['XValue'];
+            $yVariableId = $axesValues[$i]['YValue'];
+            $startDate = $this->GetValue('StartDate' . $ListIndex);
+            $endDate = $this->GetValue('EndDate' . $ListIndex);
+            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
+
+            $b = $this->GetValue('YIntercept');
+            $m = $this->GetValue('Slope');
+            $r = $this->GetValue('MeasureOfDetermination');
+
+            $this->SetValue('YIntercept', $lineParameters[0]);
+            $this->SetValue('Slope', $lineParameters[1]);
+            $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
+            $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
+
+            $valuesX = $Values['x'];
+            $valuesY = $Values['y'];
+
+            $report = [];
+
+            for ($i = 0; $i <= count($values); $i++) {
+                $report[$i]['BrechnetAusBaseline'] = $m * $values[$i]['x'] + $b;
+                $report[$i]['Einsparung'] = $report[$i]['BrechnetAusBaseline'] - $values[$i]['y'];
+            }
+            return $report;
+        }
+
         protected function ProcessHookData()
         {
             if ($this->ReadPropertyString('ChartFormat') == 'svg') {
