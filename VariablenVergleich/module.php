@@ -378,14 +378,14 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             IPS_LogMessage('test', print_r($Values, true));
 
             for ($i = 0; $i <= count($Values['x']) - 1; $i++) {
-                $report[$i]['timestampX'] = $Values['x'][$i]['TimeStamp'];
-                $report[$i]['timestampy'] = $Values['y'][$i]['TimeStamp'];
+                $report[$i]['timestampX'] = date('d.m.y h:i', $Values['x'][$i]['TimeStamp']);
+                $report[$i]['timestampy'] = date('d.m.y h:i', $Values['y'][$i]['TimeStamp']);
                 $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['Avg'] + $b;
                 $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
             }
 
             if ($type == 'csv') {
-                $csv = 'TimestampX;TimestampY,Berchnet aus Baseline,Einsparung';
+                $csv = 'Datum X;Datum Y,Berchnet aus Baseline,Einsparung';
                 $csv .= "\n";
                 foreach ($report as $value) {
                     $csv .= implode(';', $value) . PHP_EOL;
