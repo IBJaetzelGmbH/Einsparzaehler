@@ -380,8 +380,8 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             for ($i = 0; $i <= count($Values['x']) - 1; $i++) {
                 $report[$i]['timestampX'] = $Values['x'][$i]['TimeStamp'];
                 $report[$i]['timestampy'] = $Values['y'][$i]['TimeStamp'];
-                $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['avg'] + $b;
-                $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['avg'];
+                $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['Avg'] + $b;
+                $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
             }
             return $report;
         }
