@@ -360,8 +360,8 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $this->SetStatus(202);
                 return;
             }
-            $xVariableId = $axesValues[$i]['XValue'];
-            $yVariableId = $axesValues[$i]['YValue'];
+            $xVariableId = $axesValues[$ListIndex]['XValue'];
+            $yVariableId = $axesValues[$ListIndex]['YValue'];
             $startDate = $this->GetValue('StartDate' . $ListIndex);
             $endDate = $this->GetValue('EndDate' . $ListIndex);
             $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
