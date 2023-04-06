@@ -375,7 +375,7 @@ include_once __DIR__ . '/libs/WebHookModule.php';
 
             $report = [];
 
-            for ($i = 0; $i <= count($values); $i++) {
+            for ($i = 0; $i <= count($Values); $i++) {
                 $report[$i]['BrechnetAusBaseline'] = $m * $values[$i]['x'] + $b;
                 $report[$i]['Einsparung'] = $report[$i]['BrechnetAusBaseline'] - $values[$i]['y'];
             }
