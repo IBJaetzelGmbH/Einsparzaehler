@@ -50,6 +50,9 @@ include_once __DIR__ . '/libs/WebHookModule.php';
             if ($this->GetValue('EndDate') == 0) {
                 $this->SetValue('EndDate', time());
             }
+
+            $this->RegisterAttributeInteger('OldDateVariables', 0);
+
         }
 
         public function Destroy()
@@ -71,6 +74,34 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 IPS_SetPosition($mediaID, 50);
                 $this->UpdateFormField('Chart', 'mediaID', $mediaID);
             }
+
+            $oldDateVariables =  $this->ReadAttributeInteger('OldDateVariables');
+            $axesValues = json_decode($this->ReadPropertyString('AxesValues'), true);
+
+            if ($oldDateVariables == 0) {
+                $oldDateVariables = count($axesValues); // Wenn die Liste leerr ist
+            }
+
+            for ($i=0; $i <= $oldDateVariables; $i++) { 
+                IPS_LogMessage('test',$i);
+                if (count($axesValues) <= $i) {
+                    $this->UnregisterVariable('StartDate'. $i);
+                    $this->UnregisterVariable('EndDate'. $i);
+                    continue;
+                } else {
+                    $this->RegisterVariableInteger('StartDate'. $i, $this->Translate('Start Date'). ' '. $i, '~UnixTimestampDate', 60 + ($i * 10));
+                    $this->EnableAction('StartDate'.$i);
+                    if ($this->GetValue('StartDate'.$i) == 0) {
+                        $this->SetValue('StartDate' .$i, strtotime('01.01.' . date('Y')));
+                    }
+                    $this->RegisterVariableInteger('EndDate' .$i, $this->Translate('End Date') . ' '. $i, '~UnixTimestampDate', 70+  ($i * 10));
+                    $this->EnableAction('EndDate'.$i);
+                    if ($this->GetValue('EndDate'.$i) == 0) {
+                        $this->SetValue('EndDate' .$i, time());
+                    }
+                }
+            }
+            $this->WriteAttributeInteger('OldDateVariables',count($axesValues));
             $this->UpdateChart();
         }
 
