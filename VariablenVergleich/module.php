@@ -112,6 +112,8 @@ include_once __DIR__ . '/libs/WebHookModule.php';
         public function RequestAction($Ident, $Value)
         {
             switch ($Ident) {
+                case  (preg_match('/StartDate.*/', $Ident) ? true : false) :
+                case  (preg_match('/EndDate.*/', $Ident) ? true : false) :
                 case 'StartDate':
                 case 'EndDate':
                     $this->SetValue($Ident, $Value);
