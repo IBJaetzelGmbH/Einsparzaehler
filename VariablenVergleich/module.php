@@ -330,60 +330,61 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                     $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
                     $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
                 }
-            }
-                //Baseline Values
-                $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
-                $yVariableId = $this->ReadPropertyInteger('XValueBaseline');
-                $startDate = $this->GetValue('StartDateBaseline');
-                $endDate = $this->GetValue('EndDateBaseline');
-                if ($xVariableId != 0 && $yVariableId != 0) {
-                    $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-                $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
-               
-                $xVarValues = [];
-                foreach ($rawX as $dataset) {
-                    $xVarValues[] = $dataset['Avg'];
-                }
-                $valuesX = array_reverse($xVarValues);
-                IPS_LogMessage('valuesX',print_r($valuesX,true));
-                $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
-                $yVarValues = [];
-                foreach ($rawY as $dataset) {
-                    $yVarValues[] = $dataset['Avg'];
-                }
-                $valuesY = array_reverse($yVarValues);
-                IPS_LogMessage('valuesY',print_r($valuesY,true));
-                if (count($valuesX) != count($valuesY)) {
-                    $this->SetStatus(200);
-                    // The amount of values is not the same for both axis
-                    return null;
-                } elseif (count($valuesY) <= 1) {
-                    $this->SetStatus(201);
-                    // The count of values is zero or one which leads to an error in the linear regression
-                    return null;
-                }
-            } else {
-                //No vars selected
-                $this->SetStatus(202);
-                return null;
-            }
+                                //Baseline Values
+                                $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
+                                $yVariableId = $this->ReadPropertyInteger('XValueBaseline');
+                                $startDate = $this->GetValue('StartDateBaseline');
+                                $endDate = $this->GetValue('EndDateBaseline');
+                                if ($xVariableId != 0 && $yVariableId != 0) {
+                                    $archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+                                $rawX = AC_GetAggregatedValues($archiveID, $xVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+                               
+                                $xVarValues = [];
+                                foreach ($rawX as $dataset) {
+                                    $xVarValues[] = $dataset['Avg'];
+                                }
+                                $valuesX = array_reverse($xVarValues);
+                                IPS_LogMessage('valuesX',print_r($valuesX,true));
+                                $rawY = AC_GetAggregatedValues($archiveID, $yVariableId, $this->ReadPropertyInteger('AggregationLevel'), $startDate, $endDate, 0);
+                                $yVarValues = [];
+                                foreach ($rawY as $dataset) {
+                                    $yVarValues[] = $dataset['Avg'];
+                                }
+                                $valuesY = array_reverse($yVarValues);
+                                IPS_LogMessage('valuesY',print_r($valuesY,true));
+                                if (count($valuesX) != count($valuesY)) {
+                                    $this->SetStatus(200);
+                                    // The amount of values is not the same for both axis
+                                    return null;
+                                } elseif (count($valuesY) <= 1) {
+                                    $this->SetStatus(201);
+                                    // The count of values is zero or one which leads to an error in the linear regression
+                                    return null;
+                                }
+                            } else {
+                                //No vars selected
+                                $this->SetStatus(202);
+                                return null;
+                            }
+                                
+                                
+                                //Linear regression - Baseline                
+                                $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('LineColor')), 6, '0', STR_PAD_LEFT);
+                                $lineRGB = $this->splitHexToRGB($lineHex);
+                                $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
+                                $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
+                                $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
+                                $this->SetValue('YIntercept', $lineParameters[0]);
+                                $this->SetValue('Slope', $lineParameters[1]);
+                                $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
+                                $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
+                                imageline($image, $getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineColor);
+                                $svg .= $this->drawLine($getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineSVGColor);
                 
-                
-                //Linear regression - Baseline                
-                $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('LineColor')), 6, '0', STR_PAD_LEFT);
-                $lineRGB = $this->splitHexToRGB($lineHex);
-                $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
-                $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
-                $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
-                $this->SetValue('YIntercept', $lineParameters[0]);
-                $this->SetValue('Slope', $lineParameters[1]);
-                $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
-                $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
-                imageline($image, $getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineColor);
-                $svg .= $this->drawLine($getXValue($xAxisMin), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMin))), $getXValue($xAxisMax), intval($getYValue($lineParameters[0] + ($lineParameters[1] * $xAxisMax))), $lineSVGColor);
+                            $svg .= '</svg>';
+                            // $this->SendDebug('SVG', $svg, 0);
+            }
 
-            $svg .= '</svg>';
-            // $this->SendDebug('SVG', $svg, 0);
 
             //Base64 encode image
             ob_start();
