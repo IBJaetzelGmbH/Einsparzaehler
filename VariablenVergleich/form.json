@@ -12,25 +12,19 @@
                             "width": "500px",
                             "items": [
                                 {
+                                    "type": "SelectVariable",
                                     "caption": "X Value Baseline",
                                     "name": "XValueBaseline",
                                     "width": "auto",
-                                    "add": 0,
-                                    "edit": {
-                                        "type": "SelectVariable",
-                                        "requiredLogging": 1
-                                    }
+                                    "requiredLogging": 1
                                 },
                                 {
+                                    "type": "SelectVariable",
                                     "caption": "Y Value Baseline",
                                     "name": "YValueBasleine",
                                     "width": "150px",
-                                    "add": 0,
-                                    "edit": {
-                                        "type": "SelectVariable",
-                                        "requiredLogging": 1
-                                    }
-                                },                                
+                                    "requiredLogging": 1
+                                },
                                 {
                                     "type": "List",
                                     "name": "AxesValues",
