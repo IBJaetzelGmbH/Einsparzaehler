@@ -383,6 +383,15 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['Avg'] + $b;
                 $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
             }
+
+            if ($type == 'csv') {
+                $csv = 'TimestampX;TimestampY,Berchnet aus Baseline,Einsparung';
+                foreach ($report as $value) {
+                    $csv .= implode(';', $value) . PHP_EOL;
+                }
+                mb_convert_encoding($csv, 'UTF-8', mb_list_encodings());
+                return $csv;
+            }
             return $report;
         }
 
