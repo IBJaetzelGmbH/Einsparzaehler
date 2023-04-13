@@ -39,7 +39,7 @@ trait pdfReport
 EOT;
     }
 
-    private function generateTable($Values, bool $Gesamt)
+    private function generateTable($Values)
     {
         $rows = '';
         $headCols = '';
