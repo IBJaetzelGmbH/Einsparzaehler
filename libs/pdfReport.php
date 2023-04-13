@@ -62,7 +62,7 @@ EOT;
             $title = $this->Translate('Report');
             $rows .= '<tr>';
             $rows .= '<td style="text-align: left;">' . $value['timestampX'] . '</td>';
-            $rows .= '<td style="text-align: left;">' . $value['Typ'] . '</td>';
+            $rows .= '<td style="text-align: left;">' . $value['Temperatur'] . '</td>';
             $rows .= '<td style="text-align: left;">' . $value['BerchnetAusBaseline'] . '</td>';
             $rows .= '<td style="text-align: left;">' . $value['Verbrauch'] . '</td>';
             $rows .= '<td style="text-align: left;">' . $value['Einsparung'] . '</td>';
