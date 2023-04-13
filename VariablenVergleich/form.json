@@ -191,6 +191,12 @@
                     "name": "Chart"
                 }
             ]
+        },
+        {
+            "type": "SelectFile",
+            "name": "Logo",
+            "caption": "Logo for Report",
+            "extensions": ".jpg,.gif,.png"
         }
     ],
     "actions": [

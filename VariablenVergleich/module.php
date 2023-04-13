@@ -61,6 +61,9 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $this->SetValue('EndDateBaseline', time());
             }
 
+            //Report settings
+            $this->RegisterPropertyString('Logo', '');
+
             $this->RegisterAttributeInteger('OldDateVariables', 0);
 
             $MedienID = @IPS_GetMediaIDByName($this->Translate('Report'), $this->InstanceID);
