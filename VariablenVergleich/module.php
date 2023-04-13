@@ -3,8 +3,12 @@
 declare(strict_types=1);
 
 include_once __DIR__ . '/libs/WebHookModule.php';
+include_once __DIR__ . '/../libs/pdfReport.php';
+
     class VariablenVergleich extends WebHookModule
     {
+        use pdfReport;
+
         const PNG_FONT_SIZE = 5;
         const MINOR_LINE = 4 / 2;
         const MAJOR_LINE = 8 / 2;
@@ -375,8 +379,6 @@ include_once __DIR__ . '/libs/WebHookModule.php';
 
             $report = [];
 
-            IPS_LogMessage('test', print_r($Values, true));
-
             for ($i = 0; $i <= count($Values['x']) - 1; $i++) {
                 $report[$i]['timestampX'] = date('d.m.y h:i', $Values['x'][$i]['TimeStamp']);
                 $report[$i]['timestampy'] = date('d.m.y h:i', $Values['y'][$i]['TimeStamp']);
@@ -393,6 +395,17 @@ include_once __DIR__ . '/libs/WebHookModule.php';
                 mb_convert_encoding($csv, 'UTF-8', mb_list_encodings());
                 return $csv;
             }
+
+            if ($type == 'pdf') {
+                $csv = 'Datum X;Datum Y;Berchnet aus Baseline;Einsparung';
+                $csv .= "\n";
+                foreach ($report as $value) {
+                    $csv .= implode(';', $value) . PHP_EOL;
+                }
+                mb_convert_encoding($csv, 'UTF-8', mb_list_encodings());
+                return $csv;
+            }
+
             return $report;
         }
 
