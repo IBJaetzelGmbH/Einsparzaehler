@@ -6,13 +6,13 @@ include_once __DIR__ . '/../libs/vendor/autoload.php';
 
 trait pdfReport
 {
-    protected function GeneratePDFReport(array $Values)
+    protected function GeneratePDFReport(array $Values, string $Chart)
     {
         $pdfContent = $this->GeneratePDF(
             'IP-Symcon ' . IPS_GetKernelVersion(),
             'Report',
             'Report',
-            $this->GenerateHTML($Values),
+            $this->GenerateHTML($Values, $Chart),
             IPS_GetKernelDir() . 'media/Report' . $this->InstanceID . '.pdf'
         );
 
@@ -86,7 +86,7 @@ EOT;
 EOT;
     }
 
-    private function GenerateHTML(array $Values)
+    private function GenerateHTML(array $Values, $Chart)
     {
         $header = $this->GenerateHTMLHeader();
         $table = $this->generateTable($Values);
@@ -96,6 +96,8 @@ EOT;
 $header
 <br/>
 $table
+<br/>
+<img src="@$Chart">;
 <br/>
 $footer
 EOT;
