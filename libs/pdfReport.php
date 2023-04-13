@@ -97,7 +97,7 @@ $header
 <br/>
 $table
 <br/>
-<img src="@$Chart">;
+$Chart
 <br/>
 $footer
 EOT;
