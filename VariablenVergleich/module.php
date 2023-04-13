@@ -415,7 +415,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             }
 
             if ($type == 'pdf') {
-                $ReportFileName = $this->GeneratePDFReport($report, $this->GenerateChart()['PNG']);
+                $ReportFileName = $this->GeneratePDFReport($report, $this->GenerateChart()['SVG']);
                 return $ReportFileName;
             }
 
