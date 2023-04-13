@@ -43,39 +43,29 @@ EOT;
     {
         $rows = '';
         $headCols = '';
-        $headCols2 = '';
 
         $Verbrauch = false;
         $Zaehlerstand = false;
-        $headCols .= '<td colspan="3" style="background-color: #ffff00; text-align: left;"><b>Baseline(X/Y)</b></td>';
-        $headCols .= '<td colspan="3" style="background-color: #00ff00; text-align: left;"><b>Bewerteter Zeitraum</b></td>';
-        $headCols .= '<td style="background-color: #E1C699; text-align: left;"><b>Berechnet aus Baseline</b></td>';
-        $headCols .= '<td style="background-color: #FF8800; text-align: left;"><b>Einsparung</b></td>';
-
-        $headCols2 .= '<td style="text-align: left;"><b>Date/Time</b></td>';
-        $headCols2 .= '<td style="text-align: left;"><b>TA</b></td>';
-        $headCols2 .= '<td style="text-align: left;"><b>WMZ</b></td>';
-        $headCols2 .= '<td style="text-align: left;"><b>Date/Time</b></td>';
-        $headCols2 .= '<td style="text-align: left;"><b>TA</b></td>';
-        $headCols2 .= '<td style="text-align: left;"><b>WMZ</b></td>';
-        $headCols2 .= '<td style="text-align: left;"></td>';
-        $headCols2 .= '<td style="text-align: left;"></td>';
+        /**
+         * $headCols .= '<td colspan="3" style="background-color: #ffff00; text-align: left;"><b>Baseline(X/Y)</b></td>';
+         * $headCols .= '<td colspan="3" style="background-color: #00ff00; text-align: left;"><b>Bewerteter Zeitraum</b></td>';
+         * $headCols .= '<td style="background-color: #E1C699; text-align: left;"><b>Berechnet aus Baseline</b></td>';
+         * $headCols .= '<td style="background-color: #FF8800; text-align: left;"><b>Einsparung</b></td>';
+         */
+        $headCols .= '<td style="text-align: left;"><b>Datum Messwert</b></td>';
+        $headCols .= '<td style="text-align: left;"><b>Temperatur</b></td>';
+        $headCols .= '<td style="text-align: left;"><b>Verbrauch erwartet aus Baseline</b></td>';
+        $headCols .= '<td style="text-align: left;"><b>tatsächlicher Verbrauch</b></td>';
+        $headCols .= '<td style="text-align: left;"><b>Einsparung od. Mehrverbrauch</b></td>';
 
         foreach ($Values as $value) {
-            $title = $this->Translate('Report for') . ' ' . $value['Wohnung'] . ' ' . $value['Datum'];
+            $title = $this->Translate('Report');
             $rows .= '<tr>';
-            if ($Gesamt) {
-                $title = $this->Translate('Report');
-                $rows .= '<td style="text-align: left;">' . $value['Wohnung'] . '</td>';
-            }
-            $rows .= '<td style="text-align: left;">' . $value['ZaehlerNummer'] . '</td>';
+            $rows .= '<td style="text-align: left;">' . $value['timestampX'] . '</td>';
             $rows .= '<td style="text-align: left;">' . $value['Typ'] . '</td>';
-            if ($Verbrauch) {
-                $rows .= '<td style="text-align: left;">' . $value['Verbrauch'] . ' ' . $value['Profile'] . '</td>';
-            }
-            if ($Zaehlerstand) {
-                $rows .= '<td style="text-align: left;">' . $value['Zaehlerstand'] . ' ' . $value['Profile'] . '</td>';
-            }
+            $rows .= '<td style="text-align: left;">' . $value['BerchnetAusBaseline'] . '</td>';
+            $rows .= '<td style="text-align: left;">' . $value['Verbrauch'] . '</td>';
+            $rows .= '<td style="text-align: left;">' . $value['Einsparung'] . '</td>';
             $rows .= '</tr>';
         }
 
@@ -88,9 +78,6 @@ EOT;
 	<tr style="padding:5px;">
 	   $headCols
 	</tr>
-    <tr style="background-color: #cccccc; padding:5px;">
-    $headCols2
- </tr>
 	$rows
 	<tr>
 		<td colspan="5"><hr/></td>

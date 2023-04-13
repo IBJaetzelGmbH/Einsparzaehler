@@ -390,13 +390,14 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
             $valuesX = $Values['x'];
             $valuesY = $Values['y'];
-
+          
             $report = [];
 
             for ($i = 0; $i <= count($Values['x']) - 1; $i++) {
                 $report[$i]['timestampX'] = date('d.m.y h:i', $Values['x'][$i]['TimeStamp']);
-                $report[$i]['timestampy'] = date('d.m.y h:i', $Values['y'][$i]['TimeStamp']);
+                $report[$i]['Temperatur'] = date('d.m.y h:i', $Values['x'][$i]['Avg']);
                 $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['Avg'] + $b;
+                $report[$i]['Verbrauch'] = $Values['y'][$i]['Avg'];
                 $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
             }
 
@@ -411,7 +412,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             }
 
             if ($type == 'pdf') {
-                $ReportFileName = $this->GeneratePDFReport($ReportValues, $Gesamt, $VermieterInfos);
+                $ReportFileName = $this->GeneratePDFReport($report);
                 return $ReportFileName;
             }
 
