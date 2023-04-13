@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-include_once __DIR__ . '/libs/WebHookModule.php';
+include_once __DIR__ . '/../libs/WebHookModule.php';
 include_once __DIR__ . '/../libs/pdfReport.php';
 
     class VariablenVergleich extends WebHookModule
@@ -397,12 +397,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             }
 
             if ($type == 'pdf') {
-                $csv = 'Datum X;Datum Y;Berchnet aus Baseline;Einsparung';
-                $csv .= "\n";
-                foreach ($report as $value) {
-                    $csv .= implode(';', $value) . PHP_EOL;
-                }
-                mb_convert_encoding($csv, 'UTF-8', mb_list_encodings());
+                $ReportFileName = $this->GeneratePDFReport($ReportValues, $Gesamt, $VermieterInfos);
                 return $csv;
             }
 
