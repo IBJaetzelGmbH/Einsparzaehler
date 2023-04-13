@@ -62,6 +62,14 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             }
 
             $this->RegisterAttributeInteger('OldDateVariables', 0);
+
+            $MedienID = @IPS_GetMediaIDByName($this->Translate('Report'), $this->InstanceID);
+            if (!IPS_MediaExists($MedienID)) {
+                $MedienID = IPS_CreateMedia(5);
+                IPS_SetName($MedienID, $this->Translate('Report'));
+                IPS_SetParent($MedienID, $this->InstanceID);
+                IPS_SetPosition($MedienID, 7);
+            }
         }
 
         public function Destroy()
@@ -127,6 +135,12 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             }
 
             return json_encode($form);
+        }
+        public function testReport(string $type, int $ListIndex)
+        {
+            $ReportFileName = $this->getReport($type, $ListIndex);
+            $MedienID = @IPS_GetMediaIDByName($this->Translate('Report'), $this->InstanceID);
+            IPS_SetMediaFile($MedienID, $ReportFileName, true);
         }
 
         public function RequestAction($Ident, $Value)
@@ -398,7 +412,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
             if ($type == 'pdf') {
                 $ReportFileName = $this->GeneratePDFReport($ReportValues, $Gesamt, $VermieterInfos);
-                return $csv;
+                return $ReportFileName;
             }
 
             return $report;
