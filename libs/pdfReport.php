@@ -12,7 +12,7 @@ trait pdfReport
             'IP-Symcon ' . IPS_GetKernelVersion(),
             'Report',
             'Report',
-            $this->GenerateHTML($Values, $Chart),
+            $this->GenerateHTML($Values,$Chart),
             IPS_GetKernelDir() . 'media/Report' . $this->InstanceID . '.pdf'
         );
 
@@ -97,7 +97,7 @@ $header
 <br/>
 $table
 <br/>
-$Chart
+<img src="@$Chart">;
 <br/>
 $footer
 EOT;
