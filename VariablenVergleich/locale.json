@@ -37,7 +37,10 @@
             "X Value": "X Wert",
             "Y Value": "Y Wert",
             "Function": "Funktion",
-            "Report": "Bereicht"
+            "Report Energy-saving meter": "Bericht Einsparzähler",
+            "Deveation": "Abweichung",
+            "The value": "Der Wert",
+            "could be faulty.": "könnte fehlerhaft sein."
         }
     }
 }

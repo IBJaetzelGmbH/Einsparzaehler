@@ -30,7 +30,6 @@
                                     "caption": "Line Color",
                                     "name": "LineColor",
                                     "width": "auto"
-
                                 },
                                 {
                                     "type": "List",
@@ -191,6 +190,12 @@
                     "name": "Chart"
                 }
             ]
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "Deveation",
+            "caption": "Deveation",
+            "suffix": "%"
         },
         {
             "type": "SelectFile",

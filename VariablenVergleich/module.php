@@ -61,6 +61,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $this->SetValue('EndDateBaseline', time());
             }
 
+            $this->RegisterPropertyInteger('Deveation', 30);
             //Report settings
             $this->RegisterPropertyString('Logo', '');
 
@@ -397,11 +398,21 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $report = [];
 
             for ($i = 0; $i <= count($Values['x']) - 1; $i++) {
-                $report[$i]['timestampX'] = date('d.m.y h:i', $Values['x'][$i]['TimeStamp']);
+                $report[$i]['timestampX'] = date('d.m.y', $Values['x'][$i]['TimeStamp']);
                 $report[$i]['Temperatur'] = $Values['x'][$i]['Avg'];
                 $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['Avg'] + $b;
                 $report[$i]['Verbrauch'] = $Values['y'][$i]['Avg'];
                 $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
+
+                //Prüfung ob Wert zu hoch oder zu niedrig
+                $deveation = $this->ReadPropertyInteger('Deveation');
+                $deveationValue = ($report[$i]['BerchnetAusBaseline'] / 100) * $deviation;
+                $min = $report[$i]['BerchnetAusBaseline'] - $deveationValue;
+                $max = $report[$i]['BerchnetAusBaseline'] + $deveationValue;
+
+                if (($report[$i]['Verbrauch'] <= $min) && ($report[$i]['Verbrauch'] >= $max)) {
+                    $this->LogMessage($this->Translate('The value') . '(' . date('d.m.y', $Values['x'][$i]['TimeStamp']) . ')' . $this->Translate('could be faulty.'), KL_WARNING);
+                }
             }
 
             if ($type == 'csv') {
