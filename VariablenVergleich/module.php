@@ -406,7 +406,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
                 //Prüfung ob Wert zu hoch oder zu niedrig
                 $deveation = $this->ReadPropertyInteger('Deveation');
-                $deveationValue = ($report[$i]['BerchnetAusBaseline'] / 100) * $deviation;
+                $deveationValue = ($report[$i]['BerchnetAusBaseline'] / 100) * $deveation;
                 $min = $report[$i]['BerchnetAusBaseline'] - $deveationValue;
                 $max = $report[$i]['BerchnetAusBaseline'] + $deveationValue;
 
