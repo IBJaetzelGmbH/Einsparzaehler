@@ -33,7 +33,7 @@ trait pdfReport
         <img src="@$logoData">
     </td>
 	<td align="right">
-        <img style="max-width: 350px; height: auto; src="@$logoBafaData">
+        <img src="@$logoBafaData">
 		<br/>
 		$date
 	</td>
