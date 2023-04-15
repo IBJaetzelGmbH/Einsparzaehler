@@ -12,7 +12,7 @@ trait pdfReport
             'IP-Symcon ' . IPS_GetKernelVersion(),
             'Report',
             'Report',
-            $this->GenerateHTML($Values,$Chart),
+            $this->GenerateHTML($Values, $Chart),
             IPS_GetKernelDir() . 'media/Report' . $this->InstanceID . '.pdf'
         );
 
@@ -21,6 +21,7 @@ trait pdfReport
     private function GenerateHTMLHeader()
     {
         $logoData = $this->ReadPropertyString('Logo');
+        $logoBafaData = base64_encode(file_get_contents('/../imgs/BAFALogo.php'));
         $firmenName = 'Ingenieurbüro Jaetzel GmbH';
         $date = date('d.m.Y');
 
@@ -28,10 +29,12 @@ trait pdfReport
 			
 <table cellpadding="5" cellspacing="0" border="0" width="95%">
 <tr>
-	<td width="50%"><img src="@$logoData"></td>
+	<td width="50%">
+        <img src="@$logoData">
+    </td>
 	<td align="right">
-		<br/><br/><br/>
-		$firmenName<br/>
+        <img src="@$logoBafaData">
+		<br/>
 		$date
 	</td>
 </tr>
