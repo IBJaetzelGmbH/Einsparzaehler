@@ -21,7 +21,7 @@ trait pdfReport
     private function GenerateHTMLHeader()
     {
         $logoData = $this->ReadPropertyString('Logo');
-        $logoBafaData = base64_encode(file_get_contents('/../imgs/BAFALogo.php'));
+        $logoBafaData = base64_encode(file_get_contents('/../imgs/BAFALogo.png'));
         $firmenName = 'Ingenieurbüro Jaetzel GmbH';
         $date = date('d.m.Y');
 
@@ -62,7 +62,7 @@ EOT;
         $headCols .= '<td style="text-align: left;"><b>Einsparung od. Mehrverbrauch</b></td>';
 
         foreach ($Values as $value) {
-            $title = $this->Translate('Report');
+            $title = $this->Translate('Report Energy-saving meter');
             $rows .= '<tr>';
             $rows .= '<td style="text-align: left;">' . $value['timestampX'] . '</td>';
             $rows .= '<td style="text-align: left;">' . number_format($value['Temperatur'], 2, ',', '') . '</td>';
