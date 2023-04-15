@@ -21,7 +21,7 @@ trait pdfReport
     private function GenerateHTMLHeader()
     {
         $logoData = $this->ReadPropertyString('Logo');
-        $logoBafaData = base64_encode(file_get_contents('/../imgs/BAFALogo.png'));
+        $logoBafaData = base64_encode(file_get_contents('/../libs/imgs/BAFALogo.png'));
         $firmenName = 'Ingenieurbüro Jaetzel GmbH';
         $date = date('d.m.Y');
 
