@@ -30,10 +30,11 @@ trait pdfReport
 <table cellpadding="5" cellspacing="0" border="0" width="95%">
 <tr>
 	<td width="50%">
-        <img src="@$logoData">
+        <img src="@$logoData"> 
+        <br />
+        <img style="max-width: 150px; height: auto; " src="@$logoBafaData">
     </td>
 	<td align="right">
-        <img style="max-width: 150px; height: auto; " src="@$logoBafaData">
 		<br/>
 		$date
 	</td>
