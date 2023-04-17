@@ -25,7 +25,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $this->RegisterPropertyInteger('XValueBaseline', 0);
             $this->RegisterPropertyInteger('YValueBaseline', 0);
             $this->RegisterPropertyInteger('BaseLineColor', 0);
-            $this->RegisterPropertyInteger('BaseLineCloud', true);
+            $this->RegisterPropertyBoolean('BaseLineCloud', true);
 
             //Variable settings
             $this->RegisterPropertyInteger('AggregationLevel', 1);
