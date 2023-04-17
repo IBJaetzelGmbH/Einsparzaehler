@@ -25,7 +25,6 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $this->RegisterPropertyInteger('XValueBaseline', 0);
             $this->RegisterPropertyInteger('YValueBaseline', 0);
             $this->RegisterPropertyInteger('BaseLineColor', 0);
-            $this->RegisterPropertyBoolean('BaseLineCloud', true);
 
             //Variable settings
             $this->RegisterPropertyInteger('AggregationLevel', 1);
@@ -61,6 +60,12 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             if ($this->GetValue('EndDateBaseline') == 0) {
                 $this->SetValue('EndDateBaseline', time());
             }
+
+            $this->RegisterVariableBoolean('BaseLineCloud', $this->Translate('BaseLine Cloud'), '~Switch', 53);
+            $this->EnableAction('BaseLineCloud');
+
+            $this->RegisterVariableString('ReportForRange', $this->Translate('Report for Range'), '', 54);
+            $this->EnableAction('ReportForRange');
 
             $this->RegisterPropertyInteger('Outlier', 30);
             //Report settings
@@ -144,7 +149,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
         public function testReport(string $type, int $ListIndex)
         {
             $ReportFileName = $this->getReport($type, $ListIndex);
-            $MedienID = @IPS_GetMediaIDByName($this->Translate('Report'), $this->InstanceID);
+            $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
             IPS_SetMediaFile($MedienID, $ReportFileName, true);
         }
 
@@ -152,15 +157,20 @@ include_once __DIR__ . '/../libs/pdfReport.php';
         {
             switch ($Ident) {
                 case  preg_match('/StartDate.*/', $Ident) ? true : false:
-                // No break. Add additional comment above this line if intentional
                 case  preg_match('/EndDate.*/', $Ident) ? true : false:
-                // No break. Add additional comment above this line if intentional
                 case 'StartDate':
                 case 'EndDate':
+                case 'BaseLineCloud':
                     $this->SetValue($Ident, $Value);
                     $this->UpdateChart();
                     break;
+                case 'ReportForRange':
+                    $this->SetValue($Ident, $Value);
+                    $ReportFileName = $this->getReport($type, $Value);
+                    $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
+                    IPS_SetMediaFile($MedienID, $ReportFileName, true);
 
+                    // No break. Add additional comment above this line if intentional
                 default:
                     throw new Exception('Invalid Ident');
             }
@@ -332,7 +342,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
 
             //Baselinre auch als Wolke zeichnen
-            if ($this->ReadPropertyBoolean('BaseLineCloud')) {
+            if ($this->GetValue('BaseLineCloud')) {
                 $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $this->ReadPropertyInteger('BaseLineColor'), $getXValue, $getYValue);
             }
 
