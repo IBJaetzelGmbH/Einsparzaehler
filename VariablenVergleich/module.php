@@ -637,7 +637,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
         }
 
         //private function drawPointCloud(int $RangeIndex)
-        private function drawPointCloud(int $xVariableId, int $yVariableId, $startDate, $endData, int $pointColor)
+        private function drawPointCloud(int $xVariableId, int $yVariableId, $startDate, $endDate, int $pointColor)
         {
             $svg = '';
             $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
