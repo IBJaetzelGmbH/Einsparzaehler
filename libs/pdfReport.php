@@ -95,6 +95,7 @@ EOT;
         $header = $this->GenerateHTMLHeader();
         $table = $this->generateTable($Values);
         $footer = $this->Translate('');
+        $function = $this->GetValue('Function');
 
         return <<<EOT
 $header
@@ -102,6 +103,8 @@ $header
 $table
 <br/>
 <img src="@$Chart">
+<br />
+$function
 <br/>
 $footer
 EOT;
