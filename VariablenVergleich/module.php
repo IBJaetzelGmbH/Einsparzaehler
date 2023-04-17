@@ -24,7 +24,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             //Baseline Variables
             $this->RegisterPropertyInteger('XValueBaseline', 0);
             $this->RegisterPropertyInteger('YValueBaseline', 0);
-            $this->RegisterPropertyInteger('LineColor', 0);
+            $this->RegisterPropertyInteger('BaseLineColor', 0);
+            $this->RegisterPropertyInteger('BaseLineCloud', true);
 
             //Variable settings
             $this->RegisterPropertyInteger('AggregationLevel', 1);
@@ -189,7 +190,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             }
         }
 
-        public function GenerateChart()
+        public function GenerateChart(int $RangeIndex = null)
         {
             $yAxisMax = $this->ReadPropertyInteger('YMax');
             $yAxisMin = $this->ReadPropertyInteger('YMin');
@@ -304,29 +305,25 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             imagestring($image, 5, $customWidth / 2 - intval((strlen($xLabelText) * $charWidth) / 2), $getYValue($xAxisMin) + $axisNameLabelOffset, $xLabelText, $textColor);
             $svg .= $this->drawAxisTitle($customWidth / 2, $customHeight - $svgOffset, 'black', $xLabelText);
 
-            for ($i = 0; $i < count($axesValues); $i++) {
-                $xVariableId = $axesValues[$i]['XValue'];
-                $yVariableId = $axesValues[$i]['YValue'];
-                $startDate = $this->GetValue('StartDate' . $i);
-                $endDate = $this->GetValue('EndDate' . $i);
-
-                $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
-                if ($Values != null) {
-                    $valuesX = $Values['x'];
-                    $valuesY = $Values['y'];
-
-                    //Draw point cloud
-                    $pointHex = '#' . str_pad(dechex($axesValues[$i]['PointColor']), 6, '0', STR_PAD_LEFT);
-                    $pointRGB = $this->splitHexToRGB($pointHex);
-                    $pointColor = imagecolorallocate($image, $pointRGB[0], $pointRGB[1], $pointRGB[2]);
-                    for ($j = 0; $j < count($valuesY); $j++) {
-                        $xValue = $getXValue($valuesX[$j]);
-                        $yValue = $getYValue($valuesY[$j]);
-                        $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
-                        $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
-                    }
+            //Alle Punkte aus der Liste malen, oder nur einen.
+            if ($RangeIndex == null) {
+                for ($i = 0; $i < count($axesValues); $i++) {
+                    $xVariableId = $axesValues[$i]['XValue'];
+                    $yVariableId = $axesValues[$i]['YValue'];
+                    $startDate = $this->GetValue('StartDate' . $i);
+                    $endDate = $this->GetValue('EndDate' . $i);
+                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endData, $axesValues[$i]['PointColor']);
+                }
+            } else {
+                if (count($axesValues) >= $RangeIndex) {
+                    $xVariableId = $axesValues[$RangeIndex]['XValue'];
+                    $yVariableId = $axesValues[$RangeIndex]['YValue'];
+                    $startDate = $this->GetValue('StartDate' . $RangeIndex);
+                    $endDate = $this->GetValue('EndDate' . $RangeIndex);
+                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endData, $axesValues[$i]['PointColor']);
                 }
             }
+
             //Baseline Values
             $xVariableId = $this->ReadPropertyInteger('XValueBaseline');
             $yVariableId = $this->ReadPropertyInteger('YValueBaseline');
@@ -334,11 +331,16 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $endDate = $this->GetValue('EndDateBaseline');
             $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
 
+            //Baselinre auch als Wolke zeichnen
+            if ($this->ReadPropertyBoolean('BaseLineCloud')) {
+                $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endData, $this->ReadPropertyInteger('BaseLineColor'));
+            }
+
             if ($Values != null) {
                 $valuesX = $Values['x'];
                 $valuesY = $Values['y'];
                 //Linear regression - Baseline
-                $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('LineColor')), 6, '0', STR_PAD_LEFT);
+                $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('BaseLineColor')), 6, '0', STR_PAD_LEFT);
                 $lineRGB = $this->splitHexToRGB($lineHex);
                 $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
                 $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
@@ -632,5 +634,28 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $VarValues['x'] = $valuesX;
             $VarValues['y'] = $valuesY;
             return $VarValues;
+        }
+
+        //private function drawPointCloud(int $RangeIndex)
+        private function drawPointCloud(int $xVariableId, int $yVariableId, $startDate, $endData, int $pointColor)
+        {
+            $svg = '';
+            $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
+            if ($Values != null) {
+                $valuesX = $Values['x'];
+                $valuesY = $Values['y'];
+
+                //Draw point cloud
+                $pointHex = '#' . str_pad(dechex($pointColor), 6, '0', STR_PAD_LEFT);
+                $pointRGB = $this->splitHexToRGB($pointHex);
+                $pointColor = imagecolorallocate($image, $pointRGB[0], $pointRGB[1], $pointRGB[2]);
+                for ($j = 0; $j < count($valuesY); $j++) {
+                    $xValue = $getXValue($valuesX[$j]);
+                    $yValue = $getYValue($valuesY[$j]);
+                    $this->pngPoint($image, $xValue, $yValue, self::CIRCLE_DIAMETER, $pointColor);
+                    $svg .= $this->drawCircle($xValue, $yValue, self::CIRCLE_DIAMETER / 2, $pointHex);
+                }
+            }
+            return $svg;
         }
     }

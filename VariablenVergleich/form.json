@@ -27,10 +27,15 @@
                                 },
                                 {
                                     "type": "SelectColor",
-                                    "caption": "Line Color",
-                                    "name": "LineColor",
+                                    "caption": "BaseLine Color",
+                                    "name": "BaseLineColor",
                                     "width": "auto"
                                 },
+                                {
+                                    "type": "CheckBox",
+                                    "name": "BaseLineCloud",
+                                    "caption": "BaseLine Cloud"
+                                },                               
                                 {
                                     "type": "List",
                                     "name": "AxesValues",

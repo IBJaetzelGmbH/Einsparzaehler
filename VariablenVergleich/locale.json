@@ -40,7 +40,8 @@
             "Report Energy-saving meter": "Bericht Einsparzähler",
             "Outlier": "Outlier",
             "The value": "Der Wert",
-            "could be faulty.": "könnte fehlerhaft sein."
+            "could be faulty.": "könnte fehlerhaft sein.",
+            "BaseLine Cloud": "BaseLine Wolken"
         }
     }
 }
