@@ -73,10 +73,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
             $this->RegisterAttributeInteger('OldDateVariables', 0);
 
-            $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
+            $MedienID = @IPS_GetMediaIDByName($this->Translate('Report Energy-saving meter'), $this->InstanceID);
             if (!IPS_MediaExists($MedienID)) {
                 $MedienID = IPS_CreateMedia(5);
-                IPS_SetName($MedienID, $this->Translate('Energy-saving meter'));
+                IPS_SetName($MedienID, $this->Translate('Report Energy-saving meter'));
                 IPS_SetParent($MedienID, $this->InstanceID);
                 IPS_SetPosition($MedienID, 50);
             }
@@ -149,7 +149,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
         public function testReport(string $type, int $ListIndex)
         {
             $ReportFileName = $this->getReport($type, $ListIndex);
-            $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
+            $MedienID = @IPS_GetMediaIDByName($this->Translate('Report Energy-saving meter'), $this->InstanceID);
             IPS_SetMediaFile($MedienID, $ReportFileName, true);
         }
 
@@ -169,7 +169,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 case 'ReportForRange':
                     $this->SetValue($Ident, $Value);
                     $ReportFileName = $this->getReport('pdf', intval($Value));
-                    $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
+                    $MedienID = @IPS_GetMediaIDByName($this->Translate('Report Energy-saving meter'), $this->InstanceID);
                     IPS_SetMediaFile($MedienID, $ReportFileName, true);
                     break;
                 default:
