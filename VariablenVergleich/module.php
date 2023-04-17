@@ -64,8 +64,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $this->RegisterVariableBoolean('BaseLineCloud', $this->Translate('BaseLine Cloud'), '~Switch', 54);
             $this->EnableAction('BaseLineCloud');
 
-            $this->RegisterVariableInteger('ReportForRange', $this->Translate('Report for Range'), '', 55);
-            $this->EnableAction('ReportForRange');
+            $this->RegisterVariableInteger('RangeforReport', $this->Translate('Range for Report'), '', 55);
+            $this->EnableAction('RangeforReport');
 
             $this->RegisterPropertyInteger('Outlier', 30);
             //Report settings
@@ -166,7 +166,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $this->SetValue($Ident, $Value);
                     $this->UpdateChart();
                     break;
-                case 'ReportForRange':
+                case 'RangeforReport':
                     $this->SetValue($Ident, $Value);
                     $ReportFileName = $this->getReport('pdf', intval($Value));
                     $MedienID = @IPS_GetMediaIDByName($this->Translate('Report Energy-saving meter'), $this->InstanceID);
