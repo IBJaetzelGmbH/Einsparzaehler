@@ -73,10 +73,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
             $this->RegisterAttributeInteger('OldDateVariables', 0);
 
-            $MedienID = @IPS_GetMediaIDByName($this->Translate('Report'), $this->InstanceID);
+            $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
             if (!IPS_MediaExists($MedienID)) {
                 $MedienID = IPS_CreateMedia(5);
-                IPS_SetName($MedienID, $this->Translate('Report'));
+                IPS_SetName($MedienID, $this->Translate('Energy-saving meter'));
                 IPS_SetParent($MedienID, $this->InstanceID);
                 IPS_SetPosition($MedienID, 7);
             }
