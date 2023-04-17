@@ -317,7 +317,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $svg .= $this->drawAxisTitle($customWidth / 2, $customHeight - $svgOffset, 'black', $xLabelText);
 
             //Alle Punkte aus der Liste malen, oder nur einen.
-            if ($RangeIndex == null) {
+            if (is_null($RangeIndex)) {
                 for ($i = 0; $i < count($axesValues); $i++) {
                     $xVariableId = $axesValues[$i]['XValue'];
                     $yVariableId = $axesValues[$i]['YValue'];
