@@ -50,21 +50,21 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $this->RegisterVariableFloat('MeasureOfDetermination', $this->Translate('Measure of determination'), '', 40);
 
             //Baseline Variables
-            $this->RegisterVariableInteger('StartDateBaseline', $this->Translate('Start Date Baseline'), '~UnixTimestampDate', 51);
+            $this->RegisterVariableInteger('StartDateBaseline', $this->Translate('Start Date Baseline'), '~UnixTimestampDate', 52);
             $this->EnableAction('StartDateBaseline');
             if ($this->GetValue('StartDateBaseline') == 0) {
                 $this->SetValue('StartDateBaseline', strtotime('01.01.' . date('Y')));
             }
-            $this->RegisterVariableInteger('EndDateBaseline', $this->Translate('End Date Baseline'), '~UnixTimestampDate', 52);
+            $this->RegisterVariableInteger('EndDateBaseline', $this->Translate('End Date Baseline'), '~UnixTimestampDate', 53);
             $this->EnableAction('EndDateBaseline');
             if ($this->GetValue('EndDateBaseline') == 0) {
                 $this->SetValue('EndDateBaseline', time());
             }
 
-            $this->RegisterVariableBoolean('BaseLineCloud', $this->Translate('BaseLine Cloud'), '~Switch', 53);
+            $this->RegisterVariableBoolean('BaseLineCloud', $this->Translate('BaseLine Cloud'), '~Switch', 54);
             $this->EnableAction('BaseLineCloud');
 
-            $this->RegisterVariableInteger('ReportForRange', $this->Translate('Report for Range'), '', 54);
+            $this->RegisterVariableInteger('ReportForRange', $this->Translate('Report for Range'), '', 55);
             $this->EnableAction('ReportForRange');
 
             $this->RegisterPropertyInteger('Outlier', 30);
@@ -78,7 +78,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $MedienID = IPS_CreateMedia(5);
                 IPS_SetName($MedienID, $this->Translate('Energy-saving meter'));
                 IPS_SetParent($MedienID, $this->InstanceID);
-                IPS_SetPosition($MedienID, 7);
+                IPS_SetPosition($MedienID, 50);
             }
         }
 
