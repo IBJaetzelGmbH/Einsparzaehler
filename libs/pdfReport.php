@@ -76,7 +76,7 @@ EOT;
             $summeEinsparung += $value['Einsparung'];
         }
 
-        $rows .= '<tr style="border-top: thin solid"';
+        $rows .= '<tr style="border-top: thin solid">';
         $rows .= '<td style="text-align: left;">' . $this->Translate('Sum') . '</td>';
         $rows .= '<td style="text-align: left;"></td>';
         $rows .= '<td style="text-align: left;"></td>';
