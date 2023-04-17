@@ -423,7 +423,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $min = $report[$i]['BerchnetAusBaseline'] - $outlierValue;
                 $max = $report[$i]['BerchnetAusBaseline'] + $outlierValue;
 
-                if (($report[$i]['Verbrauch'] <= $min) && ($report[$i]['Verbrauch'] >= $max)) {
+                if (($report[$i]['Verbrauch'] <= $min) OR ($report[$i]['Verbrauch'] >= $max)) {
                     $this->LogMessage($this->Translate('The value') . '(' . date('d.m.y', $Values['x'][$i]['TimeStamp']) . ')' . $this->Translate('could be faulty.'), KL_WARNING);
                 }
             }
