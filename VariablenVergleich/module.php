@@ -169,7 +169,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $ReportFileName = $this->getReport('pdf', $Value);
                     $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
                     IPS_SetMediaFile($MedienID, $ReportFileName, true);
-
+                    break;
                     // No break. Add additional comment above this line if intentional
                 default:
                     throw new Exception('Invalid Ident');
