@@ -78,7 +78,7 @@ EOT;
 
         $rows .= '<tr>';
         $rows .= '<td colspan="5"><hr/></td>';
-        $rows .= '</tr>"';
+        $rows .= '</tr>';
         $rows .= '<tr>';
         $rows .= '<td style="text-align: left;">' . $this->Translate('Sum') . '</td>';
         $rows .= '<td style="text-align: left;"></td>';
