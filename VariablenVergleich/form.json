@@ -193,8 +193,8 @@
         },
         {
             "type": "NumberSpinner",
-            "name": "Deveation",
-            "caption": "Deveation",
+            "name": "Outlier",
+            "caption": "Outlier",
             "suffix": "%"
         },
         {

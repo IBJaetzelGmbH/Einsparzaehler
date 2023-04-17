@@ -61,7 +61,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $this->SetValue('EndDateBaseline', time());
             }
 
-            $this->RegisterPropertyInteger('Deveation', 30);
+            $this->RegisterPropertyInteger('Outlier', 30);
             //Report settings
             $this->RegisterPropertyString('Logo', '');
 
@@ -405,10 +405,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
 
                 //Prüfung ob Wert zu hoch oder zu niedrig
-                $deveation = $this->ReadPropertyInteger('Deveation');
-                $deveationValue = ($report[$i]['BerchnetAusBaseline'] / 100) * $deveation;
-                $min = $report[$i]['BerchnetAusBaseline'] - $deveationValue;
-                $max = $report[$i]['BerchnetAusBaseline'] + $deveationValue;
+                $outlier = $this->ReadPropertyInteger('Outlier');
+                $outlierValue = ($report[$i]['BerchnetAusBaseline'] / 100) * $outlier;
+                $min = $report[$i]['BerchnetAusBaseline'] - $outlierValue;
+                $max = $report[$i]['BerchnetAusBaseline'] + $outlierValue;
 
                 if (($report[$i]['Verbrauch'] <= $min) && ($report[$i]['Verbrauch'] >= $max)) {
                     $this->LogMessage($this->Translate('The value') . '(' . date('d.m.y', $Values['x'][$i]['TimeStamp']) . ')' . $this->Translate('could be faulty.'), KL_WARNING);
