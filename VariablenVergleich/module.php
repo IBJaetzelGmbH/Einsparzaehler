@@ -166,7 +166,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     break;
                 case 'ReportForRange':
                     $this->SetValue($Ident, $Value);
-                    $ReportFileName = $this->getReport($type, $Value);
+                    $ReportFileName = $this->getReport('pdf', $Value);
                     $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
                     IPS_SetMediaFile($MedienID, $ReportFileName, true);
 
