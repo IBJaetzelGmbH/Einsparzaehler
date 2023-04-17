@@ -157,7 +157,9 @@ include_once __DIR__ . '/../libs/pdfReport.php';
         {
             switch ($Ident) {
                 case  preg_match('/StartDate.*/', $Ident) ? true : false:
+                // No break. Add additional comment above this line if intentional
                 case  preg_match('/EndDate.*/', $Ident) ? true : false:
+                // No break. Add additional comment above this line if intentional
                 case 'StartDate':
                 case 'EndDate':
                 case 'BaseLineCloud':
@@ -166,11 +168,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     break;
                 case 'ReportForRange':
                     $this->SetValue($Ident, $Value);
-                    $ReportFileName = $this->getReport('pdf', $Value);
+                    $ReportFileName = $this->getReport('pdf', intval($Value));
                     $MedienID = @IPS_GetMediaIDByName($this->Translate('Energy-saving meter'), $this->InstanceID);
                     IPS_SetMediaFile($MedienID, $ReportFileName, true);
                     break;
-                    // No break. Add additional comment above this line if intentional
                 default:
                     throw new Exception('Invalid Ident');
             }
