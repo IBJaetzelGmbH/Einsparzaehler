@@ -62,8 +62,10 @@ EOT;
         $headCols .= '<td style="text-align: left;"><b>tatsächlicher Verbrauch</b></td>';
         $headCols .= '<td style="text-align: left;"><b>Einsparung od. Mehrverbrauch</b></td>';
 
+        $summeEinsparung = 0;
+        $title = $this->Translate('Report Energy-saving meter');
+
         foreach ($Values as $value) {
-            $title = $this->Translate('Report Energy-saving meter');
             $rows .= '<tr>';
             $rows .= '<td style="text-align: left;">' . $value['timestampX'] . '</td>';
             $rows .= '<td style="text-align: left;">' . number_format($value['Temperatur'], 2, ',', '') . '</td>';
@@ -71,7 +73,16 @@ EOT;
             $rows .= '<td style="text-align: left;">' . number_format($value['Verbrauch'], 2, ',', '') . '</td>';
             $rows .= '<td style="text-align: left;">' . number_format($value['Einsparung'], 2, ',', '') . '</td>';
             $rows .= '</tr>';
+            $summeEinsparung += $value['Einsparung'];
         }
+
+        $rows .= '<tr>';
+        $rows .= '<td style="text-align: left;">' . $this->Translate('Sum') . '</td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;">' . number_format($summeEinsparung, 2, ',', '') . '</td>';
+        $rows .= '</tr>';
 
         return <<<EOT
         <h2>$title</h2>
@@ -95,7 +106,18 @@ EOT;
         $header = $this->GenerateHTMLHeader();
         $table = $this->generateTable($Values);
         $footer = $this->Translate('');
+
+        $labelFunction = $this->Translate('Function');
         $function = $this->GetValue('Function');
+
+        $YIntercept = $this->GetValue('YIntercept');
+        $labelYIntercept = $this->Translate('b');
+
+        $labelSlope = $this->Translate('m');
+        $Slope = $this->GetValue('Slope');
+
+        $labelMeasureOfDetermination = $this->Translate('Measure of determination');
+        $MeasureOfDetermination = $this->GetValue('MeasureOfDetermination');
 
         return <<<EOT
 $header
@@ -104,10 +126,23 @@ $table
 <br/>
 <img src="@$Chart">
 <br />
-$function
+$labelFunction : $function<br />
+$labelYIntercept : $YIntercept<br />
+$labelSlope : $Slope<br />
+$labelMeasureOfDetermination : $MeasureOfDetermination<br />
+
+M: $Slope
+
+<br />
+
 <br/>
 $footer
 EOT;
+
+        $this->SetValue('YIntercept', $lineParameters[0]);
+        $this->SetValue('Slope', $lineParameters[1]);
+        $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
+        $this->SetValue('MeasureOfDetermination', $lineParameters[2]);
     }
 
     private function GeneratePDF($author, $title, $subject, $html, $filename)
