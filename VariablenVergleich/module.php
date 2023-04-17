@@ -330,7 +330,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $yVariableId = $axesValues[$RangeIndex]['YValue'];
                     $startDate = $this->GetValue('StartDate' . $RangeIndex);
                     $endDate = $this->GetValue('EndDate' . $RangeIndex);
-                    $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor'], $getXValue, $getYValue);
+                    $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$RangeIndex]['PointColor'], $getXValue, $getYValue);
                 }
             }
 
