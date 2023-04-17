@@ -312,7 +312,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $yVariableId = $axesValues[$i]['YValue'];
                     $startDate = $this->GetValue('StartDate' . $i);
                     $endDate = $this->GetValue('EndDate' . $i);
-                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endData, $axesValues[$i]['PointColor']);
+                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor']);
                 }
             } else {
                 if (count($axesValues) >= $RangeIndex) {
@@ -320,7 +320,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $yVariableId = $axesValues[$RangeIndex]['YValue'];
                     $startDate = $this->GetValue('StartDate' . $RangeIndex);
                     $endDate = $this->GetValue('EndDate' . $RangeIndex);
-                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endData, $axesValues[$i]['PointColor']);
+                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor']);
                 }
             }
 
@@ -333,7 +333,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
             //Baselinre auch als Wolke zeichnen
             if ($this->ReadPropertyBoolean('BaseLineCloud')) {
-                $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endData, $this->ReadPropertyInteger('BaseLineColor'));
+                $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endDate, $this->ReadPropertyInteger('BaseLineColor'));
             }
 
             if ($Values != null) {
