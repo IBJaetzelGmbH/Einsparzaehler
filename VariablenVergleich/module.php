@@ -64,7 +64,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $this->RegisterVariableBoolean('BaseLineCloud', $this->Translate('BaseLine Cloud'), '~Switch', 53);
             $this->EnableAction('BaseLineCloud');
 
-            $this->RegisterVariableString('ReportForRange', $this->Translate('Report for Range'), '', 54);
+            $this->RegisterVariableInteger('ReportForRange', $this->Translate('Report for Range'), '', 54);
             $this->EnableAction('ReportForRange');
 
             $this->RegisterPropertyInteger('Outlier', 30);
