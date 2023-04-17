@@ -312,7 +312,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $yVariableId = $axesValues[$i]['YValue'];
                     $startDate = $this->GetValue('StartDate' . $i);
                     $endDate = $this->GetValue('EndDate' . $i);
-                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor']);
+                    $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor']);
                 }
             } else {
                 if (count($axesValues) >= $RangeIndex) {
@@ -320,7 +320,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $yVariableId = $axesValues[$RangeIndex]['YValue'];
                     $startDate = $this->GetValue('StartDate' . $RangeIndex);
                     $endDate = $this->GetValue('EndDate' . $RangeIndex);
-                    $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor']);
+                    $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $axesValues[$i]['PointColor']);
                 }
             }
 
@@ -333,7 +333,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
             //Baselinre auch als Wolke zeichnen
             if ($this->ReadPropertyBoolean('BaseLineCloud')) {
-                $svg .= $this->drawPointCloud($xVariableId, $yVariableId, $startDate, $endDate, $this->ReadPropertyInteger('BaseLineColor'));
+                $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $this->ReadPropertyInteger('BaseLineColor'));
             }
 
             if ($Values != null) {
@@ -637,7 +637,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
         }
 
         //private function drawPointCloud(int $RangeIndex)
-        private function drawPointCloud(int $xVariableId, int $yVariableId, $startDate, $endDate, int $pointColor)
+        private function drawPointCloud($image, int $xVariableId, int $yVariableId, $startDate, $endDate, int $pointColor)
         {
             $svg = '';
             $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
