@@ -76,7 +76,7 @@ EOT;
             $summeEinsparung += $value['Einsparung'];
         }
 
-        $rows .= '<tr>';
+        $rows .= '<tr style="border-top: thin solid"';
         $rows .= '<td style="text-align: left;">' . $this->Translate('Sum') . '</td>';
         $rows .= '<td style="text-align: left;"></td>';
         $rows .= '<td style="text-align: left;"></td>';
@@ -94,9 +94,6 @@ EOT;
 	   $headCols
 	</tr>
 	$rows
-	<tr>
-		<td colspan="5"><hr/></td>
-	</tr>
 </table>
 EOT;
     }
@@ -130,11 +127,7 @@ $labelFunction : $function<br />
 $labelYIntercept : $YIntercept<br />
 $labelSlope : $Slope<br />
 $labelMeasureOfDetermination : $MeasureOfDetermination<br />
-
-M: $Slope
-
 <br />
-
 <br/>
 $footer
 EOT;
