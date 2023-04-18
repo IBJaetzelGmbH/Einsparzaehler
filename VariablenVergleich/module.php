@@ -342,7 +342,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             $endDate = $this->GetValue('EndDateBaseline');
             $Values = $this->getValues($xVariableId, $yVariableId, $startDate, $endDate);
 
-            //Baselinre auch als Wolke zeichnen
+            //Baseline auch als Wolke zeichnen
             if ($this->GetValue('BaseLineCloud')) {
                 $svg .= $this->drawPointCloud($image, $xVariableId, $yVariableId, $startDate, $endDate, $this->ReadPropertyInteger('BaseLineColor'), $getXValue, $getYValue);
             }
@@ -668,6 +668,12 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             if ($Values != null) {
                 $valuesX = $Values['x'];
                 $valuesY = $Values['y'];
+
+                //Werte mit 0 filtern
+                for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
+                    unset($valuesX[$keysValueNull[$i]]);
+                    unset($valuesY[$keysValueNull[$i]]);
+                }
 
                 //Draw point cloud
                 $pointHex = '#' . str_pad(dechex($pointColor), 6, '0', STR_PAD_LEFT);
