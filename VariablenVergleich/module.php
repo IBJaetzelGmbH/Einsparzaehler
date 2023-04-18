@@ -359,8 +359,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
 
                 //Filter Werte mit 0
-                $keysValueNull =(array_keys($valuesX, 0));
-                for ($i=0; $i < count($valuesX) -1 ; $i++) { 
+                $keysValueNull = (array_keys($valuesY, 0));
+                for ($i = 0; $i < count($valuesY) - 1; $i++) {
                     unset($valuesX[$i]);
                     unset($valuesY[$i]);
                 }
