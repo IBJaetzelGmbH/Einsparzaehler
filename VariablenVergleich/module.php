@@ -672,7 +672,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $valuesY = $Values['y'];
 
                 //Filter Werte mit 0
-                $keysValueNull = (array_keys($valuesY, 0));
+                $keysValueNull = array_keys($valuesY, 0);
 
                 foreach ($keysValueNull as $key) {
                     unset($valuesX[$key]);
