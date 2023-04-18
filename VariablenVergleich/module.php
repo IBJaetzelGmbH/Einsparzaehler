@@ -351,15 +351,23 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $valuesX = $Values['x'];
                 $valuesY = $Values['y'];
 
-                IPS_LogMessage('BaseLine X Values', print_r($valuesX, true));
-                IPS_LogMessage('BaseLine Y Values', print_r($valuesY, true));
-
                 //Linear regression - Baseline
                 $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('BaseLineColor')), 6, '0', STR_PAD_LEFT);
                 $lineRGB = $this->splitHexToRGB($lineHex);
                 $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
                 $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
                 $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
+
+                //Filter Werte mit 0
+                $keysValueNull =(array_keys($valuesX, 0));
+                for ($i=0; $i < count($valuesX) -1 ; $i++) { 
+                    unset($valuesX[$i]);
+                    unset($valuesY[$i]);
+                }
+
+                IPS_LogMessage('BaseLine X Values', print_r($valuesX, true));
+                IPS_LogMessage('BaseLine Y Values', print_r($valuesY, true));
+
                 $this->SetValue('YIntercept', $lineParameters[0]);
                 $this->SetValue('Slope', $lineParameters[1]);
                 $this->SetValue('Function', sprintf('f(x) = %s - %sx', $lineParameters[0], $lineParameters[1]));
