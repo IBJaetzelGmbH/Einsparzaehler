@@ -362,7 +362,9 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
                 for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
                     unset($valuesX[$keysValueNull[$i]]);
+                    $valuesX = array_values($valuesX);
                     unset($valuesY[$keysValueNull[$i]]);
+                    $valuesY = array_values($valuesY);
                 }
 
                 $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
@@ -679,6 +681,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $valuesY = array_values($valuesY);
                 }
 
+                IPS_LogMessage('values Y', print_r($valuesY, true));
                 //Draw point cloud
                 $pointHex = '#' . str_pad(dechex($pointColor), 6, '0', STR_PAD_LEFT);
                 $pointRGB = $this->splitHexToRGB($pointHex);
