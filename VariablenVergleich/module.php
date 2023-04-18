@@ -678,19 +678,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     unset($valuesX[$key]);
                     $valuesX = array_values($valuesX);
                     unset($valuesY[$key]);
-                    $valuesY = array_values($valuesY);
+                    $test = array_values($valuesY);
                 }
 
-                IPS_LogMessage('values Y bereinigt', print_r($valuesY, true));
-                /** for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
-                 *
-                 * unset($valuesX[$keysValueNull[$i]]);
-                 * $valuesX = array_values($valuesX);
-                 *
-                 * $valuesY = array_values($valuesY);
-                 * unset($valuesY[$keysValueNull[$i]]);
-                 * }
-                 */
+                IPS_LogMessage('values Y bereinigt', print_r($test, true));
 
                 //Draw point cloud
                 $pointHex = '#' . str_pad(dechex($pointColor), 6, '0', STR_PAD_LEFT);
