@@ -362,7 +362,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $keysValueNull = (array_keys($valuesY, 0));
                 IPS_LogMessage('keysValueNull', print_r($keysValueNull, true));
                 
-                for ($i = 0; $i < count($valuesY) - 1; $i++) {
+                for ($i = 0; $i <= count($valuesY) - 1; $i++) {
+                    IPS:LogMessage('test','test');
                     unset($valuesX[$i]);
                     unset($valuesY[$i]);
                 }
