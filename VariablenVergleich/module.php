@@ -674,6 +674,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 //Filter Werte mit 0
                 $keysValueNull = (array_keys($valuesY, 0));
 
+                IPS_LogMessage('keysValueNull', print_r($keysValueNull, true));
+                IPS_LogMessage('values Y nicht bereinigt', print_r($valuesY, true));
                 for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
                     unset($valuesX[$keysValueNull[$i]]);
                     $valuesX = array_values($valuesX);
@@ -681,7 +683,9 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                     $valuesY = array_values($valuesY);
                 }
 
-                IPS_LogMessage('values Y', print_r($valuesY, true));
+                
+                IPS_LogMessage('values Y bereinigt', print_r($valuesY, true));
+                
                 //Draw point cloud
                 $pointHex = '#' . str_pad(dechex($pointColor), 6, '0', STR_PAD_LEFT);
                 $pointRGB = $this->splitHexToRGB($pointHex);
