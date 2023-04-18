@@ -681,8 +681,6 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $valuesX = array_values($valuesX);
                 $valuesY = array_values($valuesY);
 
-                IPS_LogMessage('values Y bereinigt', print_r($valuesY, true));
-
                 //Draw point cloud
                 $pointHex = '#' . str_pad(dechex($pointColor), 6, '0', STR_PAD_LEFT);
                 $pointRGB = $this->splitHexToRGB($pointHex);
