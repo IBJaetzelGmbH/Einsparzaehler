@@ -350,6 +350,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
             if ($Values != null) {
                 $valuesX = $Values['x'];
                 $valuesY = $Values['y'];
+
+                IPS_LogMessage('BaseLine X Values', print_r($valuesX, true));
+                IPS_LogMessage('BaseLine Y Values', print_r($valuesY, true));
+
                 //Linear regression - Baseline
                 $lineHex = '#' . str_pad(dechex($this->ReadPropertyInteger('BaseLineColor')), 6, '0', STR_PAD_LEFT);
                 $lineRGB = $this->splitHexToRGB($lineHex);
