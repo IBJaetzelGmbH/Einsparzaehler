@@ -416,6 +416,7 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $report[$i]['BerchnetAusBaseline'] = $m * $Values['x'][$i]['Avg'] + $b;
                 $report[$i]['Verbrauch'] = $Values['y'][$i]['Avg'];
                 $report[$i]['Einsparung'] = $report[$i]['BerchnetAusBaseline'] - $Values['y'][$i]['Avg'];
+                $report[$i]['Fehlerhaft'] = false;
 
                 //Prüfung ob Wert zu hoch oder zu niedrig
                 $outlier = $this->ReadPropertyInteger('Outlier');
@@ -423,7 +424,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $min = $report[$i]['BerchnetAusBaseline'] - $outlierValue;
                 $max = $report[$i]['BerchnetAusBaseline'] + $outlierValue;
 
-                if (($report[$i]['Verbrauch'] <= $min) OR ($report[$i]['Verbrauch'] >= $max)) {
+                if (($report[$i]['Verbrauch'] <= $min) || ($report[$i]['Verbrauch'] >= $max)) {
+                    $report[$i]['Fehlerhaft'] = true;
                     $this->LogMessage($this->Translate('The value') . ' (' . date('d.m.y', $Values['x'][$i]['TimeStamp']) . ') ' . $this->Translate('could be faulty.'), KL_WARNING);
                 }
             }

@@ -63,10 +63,16 @@ EOT;
         $headCols .= '<td style="text-align: left;"><b>Einsparung od. Mehrverbrauch</b></td>';
 
         $summeEinsparung = 0;
+        $summeFehlerhaft = 0;
         $title = $this->Translate('Report Energy-saving meter');
 
         foreach ($Values as $value) {
             $rows .= '<tr>';
+            if ($value['Fehlerhaft'] == true) {
+                $rows .= '<tr style="background-color:#ffa500">';
+                $summeFehlerhaft += $value['Einsparung'];
+            }
+
             $rows .= '<td style="text-align: left;">' . $value['timestampX'] . '</td>';
             $rows .= '<td style="text-align: left;">' . number_format($value['Temperatur'], 2, ',', '') . '</td>';
             $rows .= '<td style="text-align: left;">' . number_format($value['BerchnetAusBaseline'], 2, ',', '') . '</td>';
@@ -85,6 +91,14 @@ EOT;
         $rows .= '<td style="text-align: left;"></td>';
         $rows .= '<td style="text-align: left;"></td>';
         $rows .= '<td style="text-align: left;">' . number_format($summeEinsparung, 2, ',', '') . '</td>';
+        $rows .= '</tr>';
+
+        $rows .= '<tr style="background-color:#ffa500">';
+        $rows .= '<td style="text-align: left;">' . $this->Translate('Sum faulty values') . '</td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;">' . number_format($summeFehlerhaft, 2, ',', '') . '</td>';
         $rows .= '</tr>';
 
         return <<<EOT
