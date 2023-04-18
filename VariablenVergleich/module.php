@@ -674,9 +674,9 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
                 for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
                     unset($valuesX[$keysValueNull[$i]]);
-                    $valuesX = array_value($valuesX);
+                    $valuesX = array_values($valuesX);
                     unset($valuesY[$keysValueNull[$i]]);
-                    $valuesY = array_value($valuesY);
+                    $valuesY = array_values($valuesY);
                 }
 
                 //Draw point cloud
