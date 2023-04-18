@@ -356,20 +356,16 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $lineRGB = $this->splitHexToRGB($lineHex);
                 $lineSVGColor = 'rgb(' . implode(',', $lineRGB) . ')';
                 $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
-                $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
 
                 //Filter Werte mit 0
                 $keysValueNull = (array_keys($valuesY, 0));
-               
+
                 for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
                     unset($valuesX[$keysValueNull[$i]]);
                     unset($valuesY[$keysValueNull[$i]]);
-                    //array_splice($valuesX, $keysValueNull[$i], 1);
-                    //array_splice($valuesY, $keysValueNull[$i], 1);
                 }
 
-                IPS_LogMessage('BaseLine X Values', print_r($valuesX, true));
-                IPS_LogMessage('BaseLine Y Values', print_r($valuesY, true));
+                $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
 
                 $this->SetValue('YIntercept', $lineParameters[0]);
                 $this->SetValue('Slope', $lineParameters[1]);
