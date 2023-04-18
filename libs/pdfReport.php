@@ -67,10 +67,11 @@ EOT;
         $title = $this->Translate('Report Energy-saving meter');
 
         foreach ($Values as $value) {
-            $rows .= '<tr>';
             if ($value['Fehlerhaft'] == true) {
                 $rows .= '<tr style="background-color:#ffa500">';
                 $summeFehlerhaft += $value['Einsparung'];
+            } else {
+                $rows .= '<tr>';
             }
 
             $rows .= '<td style="text-align: left;">' . $value['timestampX'] . '</td>';
