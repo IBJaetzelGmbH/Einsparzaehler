@@ -45,7 +45,8 @@
             "could be faulty.": "könnte fehlerhaft sein.",
             "BaseLine Cloud": "BaseLine Wolken",
             "Range for Report": "Bereich für Bericht",
-            "Sum": "Summe"
+            "Sum": "Summe",
+            "Summe faulty values": "Summe fehlerhafte Werte"
         }
     }
 }
