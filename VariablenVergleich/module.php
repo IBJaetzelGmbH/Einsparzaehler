@@ -358,14 +358,14 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $lineColor = imagecolorallocate($image, $lineRGB[0], $lineRGB[1], $lineRGB[2]);
 
                 //Filter Werte mit 0
-                $keysValueNull = (array_keys($valuesY, 0));
+                $keysValueNull = array_keys($valuesY, 0);
 
-                for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
-                    unset($valuesX[$keysValueNull[$i]]);
-                    $valuesX = array_values($valuesX);
-                    unset($valuesY[$keysValueNull[$i]]);
-                    $valuesY = array_values($valuesY);
+                foreach ($keysValueNull as $key) {
+                    unset($valuesX[$key]);
+                    unset($valuesY[$key]);
                 }
+                $valuesX = array_values($valuesX);
+                $valuesY = array_values($valuesY);
 
                 $lineParameters = $this->computeLinearRegressionParameters($valuesX, $valuesY);
 
@@ -676,10 +676,10 @@ include_once __DIR__ . '/../libs/pdfReport.php';
 
                 foreach ($keysValueNull as $key) {
                     unset($valuesX[$key]);
-                    $valuesX = array_values($valuesX);
                     unset($valuesY[$key]);
-                    $test = array_values($valuesY);
                 }
+                $valuesX = array_values($valuesX);
+                $valuesY = array_values($valuesY);
 
                 IPS_LogMessage('values Y bereinigt', print_r($test, true));
 
