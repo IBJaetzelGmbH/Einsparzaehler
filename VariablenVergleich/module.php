@@ -362,8 +362,8 @@ include_once __DIR__ . '/../libs/pdfReport.php';
                 $keysValueNull = (array_keys($valuesY, 0));
                
                 for ($i = 0; $i <= count($keysValueNull) - 1; $i++) {
-                    array_splice($valuesX, $i, 1);
-                    array_splice($valuesY, $i, 1);
+                    array_splice($valuesX, $keysValueNull[$i], 1);
+                    array_splice($valuesY, $keysValueNull[$i], 1);
                 }
 
                 IPS_LogMessage('BaseLine X Values', print_r($valuesX, true));
