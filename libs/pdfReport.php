@@ -102,6 +102,14 @@ EOT;
         $rows .= '<td style="text-align: left;">' . number_format($summeFehlerhaft, 2, ',', '') . '</td>';
         $rows .= '</tr>';
 
+        $rows .= '<tr style="background-color:#00ff00">';
+        $rows .= '<td style="text-align: left;">' . $this->Translate('Sum cleared') . '</td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;"></td>';
+        $rows .= '<td style="text-align: left;">' . number_format($summeEinsparung - $summeFehlerhaft, 2, ',', '') . '</td>';
+        $rows .= '</tr>';
+
         return <<<EOT
         <h2>$title</h2>
         <br/>
