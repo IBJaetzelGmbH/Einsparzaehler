@@ -1,12 +1,12 @@
 {
-    "id": "{1D14A1C8-CCEA-24E2-DE6C-3400719D1D76}",
-    "name": "VariablenVergleich",
+    "id": "{A7387865-17EB-40EC-BEDB-09D68F559057}",
+    "name": "Einsparzaehler",
     "type": 3,
     "vendor": "",
     "aliases": [],
     "parentRequirements": [],
     "childRequirements": [],
     "implemented": [],
-    "prefix": "LR",
+    "prefix": "EZ",
     "url": "https://github.com/symcon/VariablenVergleich/tree/master/VariablenVergleich"
 }
