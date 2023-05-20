@@ -5,7 +5,7 @@ declare(strict_types=1);
 include_once __DIR__ . '/../libs/WebHookModule.php';
 include_once __DIR__ . '/../libs/pdfReport.php';
 
-    class VariablenVergleich extends WebHookModule
+    class Einsparzaehler extends WebHookModule
     {
         use pdfReport;
 
